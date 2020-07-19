@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>REC World</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@700&family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <input type="checkbox" class='toggler'>
+    <div id='infoBar'>
+        <div id='buttons'>
+            <button id='stop'>STOP</button>
+            <button id='x2'>X2</button>
+            <button id='x4'>X4</button>
+        </div>
+        <div id='statsNames'>
+            <p>PLANTS:</p>
+            <p>BUGS:</p>
+            <p>GENERATION:</p>
+            <div class='statsGroup'>
+                <p>SPEED*</p>
+                <p>FASTEST:</p>
+                <p>SLOWEST:</p>
+                <p>AVERAGE:</p>
+            </div>
+            <div class='statsGroup'>
+                <p>SIZE*</p>
+                <p>BIGGEST:</p>
+                <p>SMALLEST:</p>
+                <p>AVERAGE:</p>
+            </div>
+            <div class='statsGroup'>
+                <p>SENSES*</p>
+                <p>BEST:</p>
+                <p>WORST:</p>
+                <p>AVERAGE:</p>
+            </div>
+            <div class='statsGroup'>
+                <p>AGGRESSION*</p>
+                <p>MOST AGGRESSIVE:</p>
+                <p>LEAST AGGRESSIVE:</p>
+                <p>AVERAGE:</p>
+            </div>
+            <div class='statsGroup'>
+                <p>*-initial value : 1</p>
+            </div>
+        </div>
+        <div id='stats'>
+            <p id='Pplants'>0</p>
+            <p id='Pbugs'>0</p>
+            <p id='Pgeneration'> 0</p>
+            <div class='statsGroup'>
+                <p class='invisible'>00</p>
+                <p id='PspeedH'>1</p>
+                <p id='PspeedL'>1</p>
+                <p id='PspeedA'>1</p>
+            </div>
+            <div class='statsGroup'>
+                <p class='invisible'>00</p>
+                <p id='PsizeH'>1</p>
+                <p id='PsizeL'>1</p>
+                <p id='PsizeA'>1</p>
+            </div>
+            <div class='statsGroup'>
+                <p class='invisible'>00</p>
+                <p id='PsensesH'>1</p>
+                <p id='PsensesL'>1</p>
+                <p id='PsensesA'>1</p>
+            </div>
+            <div class='statsGroup'>
+                <p class='invisible'>00</p>
+                <p id='PaggressionH'>1</p>
+                <p id='PaggressionL'>1</p>
+                <p id='PaggressionA'>1</p>
+            </div>
+        </div>
+    </div>
+    <div id='showInfoBar'>
+        <div class='arrow' id='arrow1'></div>
+        <div class='arrow' id='arrow2'></div>
+    </div>
+    <script src="js/main.js"></script>
+    <script src='js/Plant.js'></script>
+    <script src='js/Critter.js'></script>
+    <script src='js/CritterStats.js'></script>
+    <script src='js/info.js'></script>
+</body></html>

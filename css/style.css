@@ -1,0 +1,179 @@
+:root {
+    --ziel: rgba(85, 107, 47, .5);
+    --nieb: rgba(0, 47, 107, .5);
+    --buttonBorder: 2px solid rgba(255, 255, 255, .5);
+    --napisy: rgba(255, 230, 100, .8);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 10px;
+    font-family: 'Montserrat Alternates', sans-serif;
+}
+
+body {
+    background-color: rgb(80, 80, 80);
+    overflow-x: hidden;
+}
+
+canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+#infoBar {
+    position: absolute;
+    top: 0;
+    left: -260px;
+    width: 260px;
+    height: 100vh;
+    z-index: 1;
+    background-color: rgba(0, 100, 100, .5);
+    overflow: hidden;
+    transition: all .5s ease;
+}
+
+#buttons {
+    position: absolute;
+    left: 20px;
+    top: 0;
+    display: flex;
+    z-index: 1;
+}
+
+#statsNames,
+#stats {
+    position: absolute;
+    left: 20px;
+    top: 3rem;
+    padding: 2rem;
+    z-index: 2;
+    width: 240px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#stats {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    z-index: 1;
+    text-align: end;
+}
+
+p {
+    font-size: 1.3rem;
+    color: var(--napisy);
+}
+
+p:hover {
+    cursor: default;
+}
+
+div.statsGroup {
+    margin-top: 1.5rem;
+}
+
+p.invisible {
+    opacity: 0;
+}
+
+button {
+    font-size: 1.2rem;
+    width: 80px;
+    color: var(--napisy);
+    background-color: var(--ziel);
+    border: var(--buttonBorder);
+}
+
+button:hover {
+    cursor: pointer;
+    background-color: var(--nieb);
+    color: rgba(255, 255, 255, .5);
+}
+
+#showInfoBar {
+    position: absolute;
+    height: 100vh;
+    width: 20px;
+    z-index: 50;
+    background-color: var(--ziel);
+    border: var(--buttonBorder);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#showInfoBar .arrow {
+    margin-top: 4px;
+    position: relative;
+    background-color: var(--napisy);
+    width: 10px;
+    height: 2px;
+    transition: all .5s ease;
+}
+
+#showInfoBar .arrow#arrow1 {
+    transform: rotate(45deg);
+}
+
+#showInfoBar .arrow#arrow2 {
+    transform: rotate(-45deg);
+}
+
+input.toggler {
+    position: absolute;
+    width: 20px;
+    height: 100vh;
+    opacity: 0;
+    left: 0;
+    z-index: 100;
+}
+
+input.toggler:hover {
+    cursor: pointer;
+}
+
+input.toggler:checked + #infoBar {
+    transform: translateX(260px);
+}
+
+input.toggler:hover ~ #showInfoBar {
+    background-color: var(--nieb);
+}
+
+input.toggler:checked ~ #showInfoBar .arrow#arrow1 {
+    transform: rotate(-45deg);
+}
+
+input.toggler:checked ~ #showInfoBar .arrow#arrow2 {
+    transform: rotate(45deg);
+}
+
+
+@media (max-width:800px) {
+
+    #infoBar {
+        width: 170px;
+    }
+
+    #statsNames,
+    #stats {
+        width: 150px;
+        padding: .5rem;
+    }
+
+    p {
+        font-size: 1.1rem;
+    }
+
+    button {
+        width: 50px;
+        font-size: 1rem;
+    }
+}
