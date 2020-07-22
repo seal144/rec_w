@@ -546,4 +546,7 @@ Critter.prototype.setTimer = function (timer) {
 //PROBLEMY:
 //pomysleć o zróżnicowaniu wyglądu
 //zwierzaki wchodzą w dziwny taniec godowy
-// w reproduce jest ustalony warunek że jeżeli na planszy zwierząt iles w stosunku do roślin to wtedy kopolacja jest bezpotomna... chyba pozniej do wywalenia
+//zmiejszyć skalę świata
+//zrobić wykres
+//stworzyć gatunki
+//zrobić main menu
