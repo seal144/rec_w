@@ -1,10 +1,9 @@
-//upożądkować obiekt Critter
 function Critter(x, y, speed, size, senses, aggression, parentA, parentB) {
     Critter.count++;
     this.id = 'cr_' + Critter.count;
     Critter.all[this.id] = this;
     this.xy = [x, y];
-    this.energy = random(200, 300);
+    this.energy = random(300, 400); //200-300
     //
     this.parents = []
     this.parents[0] = parentA ? parentA : null;
@@ -15,6 +14,7 @@ function Critter(x, y, speed, size, senses, aggression, parentA, parentB) {
     this.genes.size = size ? size : Critter.sizeInit;
     this.genes.senses = senses ? senses : Critter.sensesInit;
     this.genes.aggression = aggression ? aggression : Critter.aggressionInit;
+    this.genes.mainfeature = this.setMainFeature();
     if (this.parents[0]) {
         this.genes.targetSize = this.genes.size;
         this.genes.size = 0;
@@ -43,6 +43,25 @@ function Critter(x, y, speed, size, senses, aggression, parentA, parentB) {
         copulate: 0,
         liveTime: ((240 + random(-30, +30)) + ((1 - this.genes.speed / Critter.speedMax) * 60)) * VAR.normalFps,
     };
+}
+//
+Critter.prototype.setMainFeature = function () {
+    const mainFeatureRatio = 1.2;
+    const speedRatio = this.genes.speed / Critter.speedInit;
+    const sizeRatio = this.genes.size / Critter.sizeInit;
+    const sensesRatio = this.genes.senses / Critter.sensesInit;
+    if (speedRatio > 1.2 && speedRatio > sizeRatio * mainFeatureRatio && speedRatio > sensesRatio * mainFeatureRatio) {
+        console.log('speed!, ' + this.id);
+        return 'speed';
+    } else if (sizeRatio > 1.2 && sizeRatio > speedRatio * mainFeatureRatio && sizeRatio > sensesRatio * mainFeatureRatio) {
+        console.log('size!, ' + this.id);
+        return 'size';
+    } else if (sensesRatio > 1.2 && sensesRatio > speedRatio * mainFeatureRatio && sensesRatio > sizeRatio * mainFeatureRatio) {
+        console.log('senses!, ' + this.id);
+        return 'senses';
+    } else {
+        return null;
+    }
 }
 //
 //DRAW CRITTER
@@ -101,6 +120,59 @@ Critter.prototype.drawBody = function () {
     main.ctx.closePath();
     main.ctx.fill()
     main.ctx.stroke();
+    if (this.genes.mainfeature === 'speed') {
+        this.drawStreak();
+    } else if (this.genes.mainfeature === 'size') {
+        this.drawStripes(sideAlfa);
+    } else if (this.genes.mainfeature === 'senses' && this.state !== 'growing') {
+        this.drawWhiskers();
+    }
+}
+//
+Critter.prototype.drawStreak = function () {
+    const faceXY = modPosition(this.xy, this.genes.size / 2, this.drawing.alfa);
+    const backXY = modPosition(this.xy, this.genes.size / 2, this.drawing.alfa + 180);
+    main.ctx.beginPath()
+    main.ctx.moveTo(faceXY[0], faceXY[1]);
+    main.ctx.lineTo(backXY[0], backXY[1]);
+    main.ctx.stroke();
+}
+//
+Critter.prototype.drawStripes = function (sideAlfa) {
+    main.ctx.beginPath();
+    main.ctx.moveTo(modPosition(this.xy, this.genes.size / 4, this.drawing.alfa + sideAlfa)[0], modPosition(this.xy, this.genes.size / 4, this.drawing.alfa + sideAlfa)[1]);
+    main.ctx.lineTo(modPosition(this.xy, this.genes.size / 4, this.drawing.alfa - sideAlfa)[0], modPosition(this.xy, this.genes.size / 4, this.drawing.alfa - sideAlfa)[1]);
+    main.ctx.stroke();
+    main.ctx.beginPath()
+    main.ctx.moveTo(modPosition(this.xy, this.genes.size / 3, this.drawing.alfa + (sideAlfa + 40))[0], modPosition(this.xy, this.genes.size / 3, this.drawing.alfa + (sideAlfa + 40))[1]);
+    main.ctx.lineTo(modPosition(this.xy, this.genes.size / 3, this.drawing.alfa - (sideAlfa + 40))[0], modPosition(this.xy, this.genes.size / 3, this.drawing.alfa - (sideAlfa + 40))[1]);
+    main.ctx.stroke()
+}
+//
+Critter.prototype.drawWhiskers = function () {
+    const whiskersLength = this.genes.senses * .2;
+    for (let i = 0; i < 2; i++) {
+        const aye = i === 0 ? 'left' : 'right';
+        const ayeXY = modPosition(this.xy, this.genes.size / 4, this.drawing.alfa + (i === 0 ? +45 : -45));
+        for (let j = 0; j < 3; j++) {
+            let tempAlfa;
+            switch (j) {
+                case 0:
+                    tempAlfa = this.drawing.alfa + (aye === 'left' ? +45 : -45);
+                    break;
+                case 1:
+                    tempAlfa = this.drawing.alfa + (aye === 'left' ? +15 : -15);
+                    break;
+                case 2:
+                    tempAlfa = this.drawing.alfa + (aye === 'left' ? +75 : -75);
+                    break;
+            }
+            main.ctx.beginPath()
+            main.ctx.moveTo(ayeXY[0], ayeXY[1])
+            main.ctx.lineTo(modPosition(ayeXY, whiskersLength, tempAlfa)[0], modPosition(ayeXY, whiskersLength, tempAlfa)[1])
+            main.ctx.stroke();
+        }
+    }
 }
 //
 Critter.prototype.drawFieldOfView = function () {
@@ -550,3 +622,5 @@ Critter.prototype.setTimer = function (timer) {
 //zrobić wykres
 //stworzyć gatunki
 //zrobić main menu
+//jak rosliny nie mają miejsca to niech zieksza im sie statystyka ze sie rozmnozyly
+//podpiąć pod sktrót info bar
