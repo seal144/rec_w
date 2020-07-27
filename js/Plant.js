@@ -52,7 +52,7 @@ Plant.prototype.draw = function () {
         this.producingSeeds = false;
         Plant.producingSeedsCount--;
         this.reproduce();
-        this.reproduceCount += 1;
+        //this.reproduceCount += 1; przemiescilem to probnie do miejsca jak się uda wydać potomka
     }
 }
 //
@@ -101,6 +101,7 @@ Plant.prototype.reproduce = function () {
             }
         }
         if (properSpot) {
+            this.reproduceCount += 1;
             new Plant(seedXY[0], seedXY[1])
         }
     }

@@ -126,7 +126,7 @@ button:hover {
     transform: rotate(-45deg);
 }
 
-input.toggler {
+input.toggler#sideToggler {
     position: absolute;
     width: 20px;
     height: 100vh;
@@ -135,23 +135,23 @@ input.toggler {
     z-index: 100;
 }
 
-input.toggler:hover {
+input.toggler#sideToggler:hover {
     cursor: pointer;
 }
 
-input.toggler:checked + #infoBar {
+input.toggler#sideToggler:checked + #infoBar {
     transform: translateX(260px);
 }
 
-input.toggler:hover ~ #showInfoBar {
+input.toggler#sideToggler:hover ~ #showInfoBar {
     background-color: var(--nieb);
 }
 
-input.toggler:checked ~ #showInfoBar .arrow#arrow1 {
+input.toggler#sideToggler:checked ~ #showInfoBar .arrow#arrow1 {
     transform: rotate(-45deg);
 }
 
-input.toggler:checked ~ #showInfoBar .arrow#arrow2 {
+input.toggler#sideToggler:checked ~ #showInfoBar .arrow#arrow2 {
     transform: rotate(45deg);
 }
 

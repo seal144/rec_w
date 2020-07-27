@@ -208,6 +208,14 @@ main = {
             } else if (main.speedX2) {
                 main.x2();
             }
+        } else if (ev.keyCode === 77) {
+            ev.preventDefault();
+            let menuChecked = document.querySelector('input.toggler#sideToggler').checked;
+            if (!menuChecked) {
+                document.querySelector('input.toggler#sideToggler').checked = true;
+            } else {
+                document.querySelector('input.toggler#sideToggler').checked = false;
+            }
         }
     }
 }

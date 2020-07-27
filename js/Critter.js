@@ -616,7 +616,6 @@ Critter.prototype.setTimer = function (timer) {
 }
 //
 //PROBLEMY:
-//pomysleć o zróżnicowaniu wyglądu
 //zwierzaki wchodzą w dziwny taniec godowy
 //zmiejszyć skalę świata
 //zrobić wykres
