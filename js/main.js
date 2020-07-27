@@ -208,15 +208,26 @@ main = {
             } else if (main.speedX2) {
                 main.x2();
             }
+        } else if (ev.keyCode === 77) {
+            ev.preventDefault();
+            let menuChecked = document.querySelector('input.toggler#sideToggler').checked;
+            if (!menuChecked) {
+                document.querySelector('input.toggler#sideToggler').checked = true;
+            } else {
+                document.querySelector('input.toggler#sideToggler').checked = false;
+            }
         }
     }
 }
 
 
-
+// KONTROWERSJE:
+// PRZY ODPOWIEDNIEJ KORELACJI ILOSCI ZWIERZĄT DO ROSLIN, ZWIERZĘTA NIE WYDAJĄ POTOMSTWA
+// PRZY BARDZO MALEJ ILOŚCI ROBAKÓW MIOT JEST ZAWSZE NAJWIĘKSZY
 
 
 
 
 
 //main.ctx.scale(.5,.5)
+//main.ctx
