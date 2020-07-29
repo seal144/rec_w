@@ -84,10 +84,14 @@ p.invisible {
 
 button {
     font-size: 1.2rem;
-    width: 80px;
+    width: 90px;
     color: var(--napisy);
     background-color: var(--ziel);
     border: var(--buttonBorder);
+}
+
+button.animSpeed {
+    width: 50px;
 }
 
 button:hover {
@@ -169,11 +173,15 @@ input.toggler#sideToggler:checked ~ #showInfoBar .arrow#arrow2 {
     }
 
     p {
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
 
     button {
-        width: 50px;
+        width: 45px;
         font-size: 1rem;
+    }
+
+    button.animSpeed {
+        width: 35px;
     }
 }

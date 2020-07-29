@@ -2,8 +2,9 @@ function Critter(x, y, speed, size, senses, aggression, parentA, parentB) {
     Critter.count++;
     this.id = 'cr_' + Critter.count;
     Critter.all[this.id] = this;
+    this.generation = parentA ? Math.max(parentA.generation + 1, parentB.generation + 1) : 1;
     this.xy = [x, y];
-    this.energy = random(300, 400); //200-300
+    this.energy = this.generation === 1 ? random(500, 700) : random(200, 300);
     //
     this.parents = []
     this.parents[0] = parentA ? parentA : null;
@@ -20,7 +21,7 @@ function Critter(x, y, speed, size, senses, aggression, parentA, parentB) {
         this.genes.size = 0;
     }
     //
-    this.hungryAtEnergy = this.genes.size / Critter.sizeInit * 350 + 350; // init:700, min: ~466, max: 1400;
+    this.hungryAtEnergy = this.genes.size / Critter.sizeInit * 300 + 300; // init:600, min: 400, max: 1200;
     this.hornyAtEnergy = this.genes.size / Critter.sizeInit * 400 + 400; // init:800, min: ~533, max: 1600;
     this.sexEnergyLoss = this.genes.size / Critter.sizeInit * 200 + 200; // init:400, min: ~266, max: 800;
     //
@@ -34,14 +35,13 @@ function Critter(x, y, speed, size, senses, aggression, parentA, parentB) {
     //
     this.didntShareList = {};
     //
-    this.generation = parentA ? Math.max(parentA.generation + 1, parentB.generation + 1) : 1;
     this.state = !this.parents[0] ? 'hungry' : 'growing';
     this.timer = {
         changeAlfa: this.setTimer('changeAlfa'),
         seekGoal: this.setTimer('seekGoal'),
         lookForThreat: this.setTimer('lookForThreat'),
         copulate: 0,
-        liveTime: ((240 + random(-30, +30)) + ((1 - this.genes.speed / Critter.speedMax) * 60)) * VAR.normalFps,
+        liveTime: ((300 + random(-30, +30)) + ((1 - this.genes.speed / Critter.speedMax) * 60)) * VAR.normalFps,
     };
 }
 //
@@ -150,7 +150,7 @@ Critter.prototype.drawStripes = function (sideAlfa) {
 }
 //
 Critter.prototype.drawWhiskers = function () {
-    const whiskersLength = this.genes.senses * .2;
+    const whiskersLength = this.genes.senses * .15;
     for (let i = 0; i < 2; i++) {
         const aye = i === 0 ? 'left' : 'right';
         const ayeXY = modPosition(this.xy, this.genes.size / 4, this.drawing.alfa + (i === 0 ? +45 : -45));
@@ -224,7 +224,9 @@ Critter.prototype.setFillColor = function () {
 //MOVING
 //
 Critter.prototype.energyOutgo = function () {
-    const energyLoss = (this.genes.speed * this.genes.size + this.genes.senses) * .005; //2.4*21+32*0.005 = 0.412 (100energy spala w 12.1s)
+    const energyLoss = ((this.genes.speed * 1.3) * (this.genes.size * 1.2) + this.genes.senses) * .005;
+    //(1.8 * 1.3) * (18 * 1.2) + 40 * 0.005 = 0.453 (100energy spala w ~11.0s)
+    //2.4*21+40*0.005 = 0.452 (100energy spala w ~11.1s)
     this.energy -= energyLoss;
     if (this.energy <= 0) {
         this.state = 'dying'
@@ -442,13 +444,13 @@ Critter.prototype.reproduce = function (positionXY, parentA, parentB) {
         for (let j = 0; j < 3; j++) {
             const inheritanceCase = random(1, 3);
             const feature = j === 0 ? 'speed' : j === 1 ? 'size' : 'senses';
-            const featureMod = 1 + random(-(Critter.affinityFactor / 2 * 100), Critter.affinityFactor / 2 * 100) * .01;
+            const featureMod = 1 + random(-(Critter.affinityFactor / 4 * 100), Critter.affinityFactor / 4 * 100) * .01;
             if (inheritanceCase === 1) {
                 babieGenes[feature] = parentA.genes[feature] * featureMod;
             } else if (inheritanceCase === 2) {
                 babieGenes[feature] = parentB.genes[feature] * featureMod;
             } else if (inheritanceCase === 3) {
-                babieGenes[feature] = (parentA.genes[feature] + parentA.genes[feature]) / 2 * featureMod;
+                babieGenes[feature] = ((parentA.genes[feature] + parentA.genes[feature]) / 2) * featureMod;
             }
         }
         const aggressionCase = random(1, 3);
@@ -546,7 +548,7 @@ Critter.prototype.ifPlantInSight = function () {
 }
 //
 Critter.prototype.ifLoverInSight = function () {
-    const loverScent = this.genes.senses * 5 + this.genes.size / 2;
+    const loverScent = this.genes.senses * 10 + this.genes.size / 2;
     let loverInSight = [];
     for (e in Critter.all) {
         let dist = distance(this.xy, Critter.all[e].xy);
@@ -617,9 +619,6 @@ Critter.prototype.setTimer = function (timer) {
 //
 //PROBLEMY:
 //zwierzaki wchodzą w dziwny taniec godowy
-//zmiejszyć skalę świata
 //zrobić wykres
 //stworzyć gatunki
 //zrobić main menu
-//jak rosliny nie mają miejsca to niech zieksza im sie statystyka ze sie rozmnozyly
-//podpiąć pod sktrót info bar

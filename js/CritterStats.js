@@ -10,13 +10,13 @@ Critter.aggressionSpread = 30;
 //
 //PRZYROST WYKŁADNICZY
 //
-Critter.speedMin = .8;
-Critter.speedInit = 2.4;
-Critter.speedMax = 7.2;
+Critter.speedMin = .6; //.8
+Critter.speedInit = 1.8; //2.4
+Critter.speedMax = 5.4; //7.2
 //
-Critter.sizeMin = 7; // it's diameter of creature
-Critter.sizeInit = 21;
-Critter.sizeMax = 63;
+Critter.sizeMin = 6; //7// it's diameter of creature
+Critter.sizeInit = 18; //15
+Critter.sizeMax = 54; //63
 //
 Critter.sensesMin = 10; // it's radius. fieldOfView = size/2+senses 
 Critter.sensesInit = 40;
@@ -28,7 +28,7 @@ Critter.babiesMin = 1;
 Critter.babiesMax = 3;
 Critter.growingTimeS = 5;
 Critter.escapingTimeS = 3;
-Critter.eatingSpeed = .8; //1.4
+Critter.eatingSpeed = .6; //.8, 1.4
 //
 Critter.similarityCheck = function (loverA, loverB) {
     for (let i = 0; i < 3; i++) {

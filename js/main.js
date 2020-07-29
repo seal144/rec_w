@@ -55,6 +55,7 @@ main = {
         document.getElementById('stop').addEventListener('click', main.startStop, false);
         document.getElementById('x2').addEventListener('click', main.x2, false);
         document.getElementById('x4').addEventListener('click', main.x4, false);
+        document.getElementById('x8').addEventListener('click', main.x8, false);
         //
         document.body.appendChild(main.canvas);
         //
@@ -63,6 +64,7 @@ main = {
         main.stop = false;
         main.speedX2 = false;
         main.speedX4 = false;
+        main.speedX8 = false;
         //
         main.setPlants();
         main.setCritters()
@@ -109,7 +111,7 @@ main = {
             Critter.all[e].draw();
         }
         if (VAR.timerNewPlant <= 0) {
-            if (Object.keys(Plant.all).length <= Plant.maxCount / 5) {
+            if (Object.keys(Plant.all).length <= Plant.maxCount / 2) {
                 new Plant(random(VAR.margin, VAR.W - VAR.margin), random(VAR.margin, VAR.H - VAR.margin));
                 VAR.timerNewPlant = VAR.addPlantSeconds * VAR.normalFps;
             }
@@ -118,7 +120,7 @@ main = {
     },
     setPlants: function () {
         VAR.startNumberPlants = Math.max(VAR.minNumberPlants, Math.round(VAR.W * VAR.H * .00003));
-        Plant.maxCount = Math.round(VAR.W * VAR.H * .001)
+        Plant.maxCount = Math.round(VAR.W * VAR.H * 0.00032) //403.968
         for (let i = 0; i < VAR.startNumberPlants; i++) {
             new Plant(random(VAR.margin, VAR.W - VAR.margin), random(VAR.margin, VAR.H - VAR.margin), random(50, 80));
         }
@@ -148,8 +150,10 @@ main = {
             }
             main.speedX2 = true;
             main.speedX4 = false;
+            main.speedX8 = false;
             document.getElementById('x2').innerHTML = 'X1';
             document.getElementById('x4').innerHTML = 'X4';
+            document.getElementById('x8').innerHTML = 'X8';
             VAR.fps = VAR.normalFps * 2;
             clearInterval(main.animation);
             main.animation = setInterval(main.animationLoop, 1000 / VAR.fps);
@@ -173,8 +177,10 @@ main = {
             }
             main.speedX4 = true;
             main.speedX2 = false;
+            main.speedX8 = false;
             document.getElementById('x4').innerHTML = 'X1';
             document.getElementById('x2').innerHTML = 'X2';
+            document.getElementById('x8').innerHTML = 'X8';
             VAR.fps = VAR.normalFps * 4;
             clearInterval(main.animation)
             main.animation = setInterval(main.animationLoop, 1000 / VAR.fps);
@@ -190,23 +196,58 @@ main = {
             main.animation = setInterval(main.animationLoop, 1000 / VAR.fps);
         }
     },
+    x8: function () {
+        if (!main.speedX8) {
+            if (main.stop) {
+                main.stop = false;
+                document.getElementById('stop').innerHTML = 'STOP';
+            }
+            main.speedX8 = true;
+            main.speedX2 = false;
+            main.speedX4 = false;
+            document.getElementById('x8').innerHTML = 'X1';
+            document.getElementById('x2').innerHTML = 'X2';
+            document.getElementById('x4').innerHTML = 'X4';
+            VAR.fps = VAR.normalFps * 8;
+            clearInterval(main.animation)
+            main.animation = setInterval(main.animationLoop, 1000 / VAR.fps);
+        } else {
+            if (main.stop) {
+                main.stop = false;
+                document.getElementById('stop').innerHTML = 'STOP';
+            }
+            main.speedX8 = false;
+            document.getElementById('x8').innerHTML = 'X8';
+            VAR.fps = VAR.normalFps;
+            clearInterval(main.animation)
+            main.animation = setInterval(main.animationLoop, 1000 / VAR.fps);
+        }
+    },
     onKey: function (ev) {
         if (ev.keyCode === 32) {
             ev.preventDefault();
             main.startStop();
         } else if (ev.keyCode === 39) {
             ev.preventDefault();
-            if (!main.speedX2 && !main.speedX4) {
+            if (main.stop) {
+                main.startStop()
+            } else if (!main.speedX2 && !main.speedX4 && !main.speedX8) {
                 main.x2();
             } else if (main.speedX2) {
                 main.x4();
+            } else if (main.speedX4) {
+                main.x8();
             }
         } else if (ev.keyCode === 37) {
             ev.preventDefault();
-            if (main.speedX4) {
+            if (main.speedX8) {
+                main.x4()
+            } else if (main.speedX4) {
                 main.x2();
             } else if (main.speedX2) {
                 main.x2();
+            } else if (!main.speedX2 && !main.stop) {
+                main.startStop();
             }
         } else if (ev.keyCode === 77) {
             ev.preventDefault();
@@ -224,6 +265,7 @@ main = {
 // KONTROWERSJE:
 // PRZY ODPOWIEDNIEJ KORELACJI ILOSCI ZWIERZĄT DO ROSLIN, ZWIERZĘTA NIE WYDAJĄ POTOMSTWA
 // PRZY BARDZO MALEJ ILOŚCI ROBAKÓW MIOT JEST ZAWSZE NAJWIĘKSZY
+// POWIEKSZYLEM MAPE POPRZEZ POMNIEJSZENIE JEJ ELEMENTÓW: WIELKOŚĆ ROŚLIN(.8), ODLEGLOŚĆ MIEDZY ROSLINAMI(.7), SIZE ZWIERZATEK (~.85), SPEED ZWIERZATEK (~.75), ZWIEKSZONY WYDATEK NA PORUSZANIE (1.2-1.3)
 
 
 
