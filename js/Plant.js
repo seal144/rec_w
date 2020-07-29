@@ -4,7 +4,7 @@ Plant.producingSeedsCount = 0;
 Plant.all = {};
 Plant.maxEnergy = 100;
 Plant.reproduceAtEnergy = 70;
-Plant.rootsRadius = 30; //18
+Plant.rootsRadius = 35; //30 //21
 Plant.childCount = 1;
 Plant.maxReproduceCount = 4;
 Plant.maxCount = 0; //nadpisane w main.setPlants
@@ -36,7 +36,7 @@ Plant.prototype.draw = function () {
     main.ctx.strokeStyle = 'white';
     main.ctx.beginPath()
     for (i = 0; i < this.leafsAngles.length; i++) {
-        let pointXY = modPosition(this.xy, this.energy * .1, this.leafsAngles[i]) //długość liści (.1)
+        let pointXY = modPosition(this.xy, this.energy * .08, this.leafsAngles[i]) //długość liści (*.1)
         main.ctx.moveTo(this.xy[0], this.xy[1]);
         main.ctx.lineTo(pointXY[0], pointXY[1]);
     }
@@ -52,7 +52,6 @@ Plant.prototype.draw = function () {
         this.producingSeeds = false;
         Plant.producingSeedsCount--;
         this.reproduce();
-        //this.reproduceCount += 1; przemiescilem to probnie do miejsca jak się uda wydać potomka
     }
 }
 //
@@ -87,7 +86,7 @@ Plant.prototype.reproduce = function () {
         let properSpot = false;
         for (let i = 0; i < 3; i++) {
             let seedThrowAngle = random(0, 360);
-            let seedThrowingLength = random(1.1 * Plant.rootsRadius, 2 * Plant.rootsRadius);
+            let seedThrowingLength = random(1.1 * Plant.rootsRadius, 3 * Plant.rootsRadius);
             seedXY = modPosition(this.xy, seedThrowingLength, seedThrowAngle);
             if (
                 seedXY[0] >= VAR.margin &&

@@ -30,6 +30,7 @@ info = {
         let sum = 0;
         let count = 0;
         let avarege;
+        let numberOfCritters = Object.keys(Critter.all).length;
         for (e in Critter.all) {
             let ifGrowing = feature === 'size' && Critter.all[e].genes.targetSize ? true : false;
             if (!highest) {
@@ -56,10 +57,10 @@ info = {
         }
         highest = Math.round((highest / Critter[feature + 'Init']) * 100) / 100;
         lowest = Math.round((lowest / Critter[feature + 'Init']) * 100) / 100;
-        avarege = Math.round((sum / count) * 100) / 100;
-        if (isNaN(highest)) highest = 0;
-        if (isNaN(lowest)) lowest = 0;
-        if (isNaN(avarege)) avarage = 0;
+        avarege = Math.round((sum / numberOfCritters) * 100) / 100;
+        if (!numberOfCritters) highest = 0;
+        if (!numberOfCritters) lowest = 0;
+        if (!numberOfCritters) avarege = 0;
         document.getElementById('P' + feature + 'H').innerHTML = highest;
         document.getElementById('P' + feature + 'L').innerHTML = lowest;
         document.getElementById('P' + feature + 'A').innerHTML = avarege;
