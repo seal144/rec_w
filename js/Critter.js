@@ -21,9 +21,9 @@ function Critter(x, y, speed, size, senses, aggression, parentA, parentB) {
         this.genes.size = 0;
     }
     //
-    this.hungryAtEnergy = this.genes.size / Critter.sizeInit * 300 + 300; // init:600, min: 400, max: 1200;
-    this.hornyAtEnergy = this.genes.size / Critter.sizeInit * 400 + 400; // init:800, min: ~533, max: 1600;
-    this.sexEnergyLoss = this.genes.size / Critter.sizeInit * 200 + 200; // init:400, min: ~266, max: 800;
+    this.hungryAtEnergy = this.genes.size / Critter.sizeInit * 200 + 400; // init:600
+    this.hornyAtEnergy = this.genes.size / Critter.sizeInit * 267 + 533; // init:800
+    this.sexEnergyLoss = this.genes.size / Critter.sizeInit * 133 + 267; // init:400
     //
     this.drawing = {};
     this.drawing.alfa = random(0, 360);
@@ -46,18 +46,15 @@ function Critter(x, y, speed, size, senses, aggression, parentA, parentB) {
 }
 //
 Critter.prototype.setMainFeature = function () {
-    const mainFeatureRatio = 1.2;
+    const mainFeatureRatio = 1.4;
     const speedRatio = this.genes.speed / Critter.speedInit;
     const sizeRatio = this.genes.size / Critter.sizeInit;
     const sensesRatio = this.genes.senses / Critter.sensesInit;
     if (speedRatio > 1.2 && speedRatio > sizeRatio * mainFeatureRatio && speedRatio > sensesRatio * mainFeatureRatio) {
-        console.log('speed!, ' + this.id);
         return 'speed';
     } else if (sizeRatio > 1.2 && sizeRatio > speedRatio * mainFeatureRatio && sizeRatio > sensesRatio * mainFeatureRatio) {
-        console.log('size!, ' + this.id);
         return 'size';
     } else if (sensesRatio > 1.2 && sensesRatio > speedRatio * mainFeatureRatio && sensesRatio > sizeRatio * mainFeatureRatio) {
-        console.log('senses!, ' + this.id);
         return 'senses';
     } else {
         return null;
@@ -224,7 +221,7 @@ Critter.prototype.setFillColor = function () {
 //MOVING
 //
 Critter.prototype.energyOutgo = function () {
-    const energyLoss = ((this.genes.speed * 1.3) * (this.genes.size * 1.2) + this.genes.senses) * .005;
+    const energyLoss = ((this.genes.speed * 2) * (this.genes.size) + this.genes.senses) * .005;
     //(1.8 * 1.3) * (18 * 1.2) + 40 * 0.005 = 0.453 (100energy spala w ~11.0s)
     //2.4*21+40*0.005 = 0.452 (100energy spala w ~11.1s)
     this.energy -= energyLoss;
@@ -444,7 +441,7 @@ Critter.prototype.reproduce = function (positionXY, parentA, parentB) {
         for (let j = 0; j < 3; j++) {
             const inheritanceCase = random(1, 3);
             const feature = j === 0 ? 'speed' : j === 1 ? 'size' : 'senses';
-            const featureMod = 1 + random(-(Critter.affinityFactor / 4 * 100), Critter.affinityFactor / 4 * 100) * .01;
+            const featureMod = 1 + random(-(Critter.affinityFactor * .33 * 100), Critter.affinityFactor * .33 * 100) * .01;
             if (inheritanceCase === 1) {
                 babieGenes[feature] = parentA.genes[feature] * featureMod;
             } else if (inheritanceCase === 2) {
@@ -578,7 +575,7 @@ Critter.prototype.ifLoverInSight = function () {
 Critter.prototype.lookForThreat = function () {
     for (e in Critter.all) {
         const dist = distance(this.xy, Critter.all[e].xy);
-        const treatScent = this.genes.senses * 1.5 + this.genes.size / 2 + Critter.all[e].genes.size / 2;
+        const treatScent = this.genes.senses * 2 + this.genes.size / 2 + Critter.all[e].genes.size / 2;
         if (dist <= treatScent && Critter.all[e].state != 'growing' && Critter.all[e].genes.size >= this.genes.size * Critter.sizeThreatFactor) {
             const directionOfThreat = findAlfa(this.xy, Critter.all[e].xy);
             this.threat = Critter.all[e];
@@ -619,6 +616,7 @@ Critter.prototype.setTimer = function (timer) {
 //
 //PROBLEMY:
 //zwierzaki wchodzą w dziwny taniec godowy
-//zrobić wykres
 //stworzyć gatunki
 //zrobić main menu
+//sprobować w energy loss przerobić geny na stosunek <= nie wiem czy to dbry pomysl
+//VAR.lineWidh - jest blad

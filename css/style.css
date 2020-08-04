@@ -15,21 +15,27 @@
 
 body {
     background-color: rgb(80, 80, 80);
-    overflow-x: hidden;
+    /*overflow-x: hidden;*/
 }
 
 canvas {
     position: absolute;
-    left: 0;
-    top: 0;
+}
+
+canvas#quantityGraph {
+    position: absolute;
+    /*left: 25px;*/
+    /*bottom: 5px;*/
+    opacity: .8;
+    border: 1px solid white;
 }
 
 #infoBar {
     position: absolute;
     top: 0;
-    left: -260px;
-    width: 260px;
-    height: 100vh;
+    /*left: -260px;*/
+    /*width: 260px;*/
+    /*height: 100vh;*/
     z-index: 1;
     background-color: rgba(0, 100, 100, .5);
     overflow: hidden;
@@ -48,10 +54,10 @@ canvas {
 #stats {
     position: absolute;
     left: 20px;
-    top: 3rem;
-    padding: 2rem;
+    top: 2rem;
     z-index: 2;
-    width: 240px;
+    /*padding: 2rem;*/
+    /*width: 240px;*/
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -66,7 +72,7 @@ canvas {
 }
 
 p {
-    font-size: 1.3rem;
+    /*font-size: 1.3rem;*/
     color: var(--napisy);
 }
 
@@ -75,7 +81,7 @@ p:hover {
 }
 
 div.statsGroup {
-    margin-top: 1.5rem;
+    margin-top: .9rem;
 }
 
 p.invisible {
@@ -84,14 +90,14 @@ p.invisible {
 
 button {
     font-size: 1.2rem;
-    width: 90px;
+    /*width: 90px;*/
     color: var(--napisy);
     background-color: var(--ziel);
     border: var(--buttonBorder);
 }
 
 button.animSpeed {
-    width: 50px;
+    /*width: 50px;*/
 }
 
 button:hover {
@@ -102,7 +108,7 @@ button:hover {
 
 #showInfoBar {
     position: absolute;
-    height: 100vh;
+    /*height: 100vh;*/
     width: 20px;
     z-index: 50;
     background-color: var(--ziel);
@@ -160,7 +166,7 @@ input.toggler#sideToggler:checked ~ #showInfoBar .arrow#arrow2 {
 }
 
 
-@media (max-width:800px) {
+/*@media (max-width:800px) {
 
     #infoBar {
         width: 170px;
@@ -184,4 +190,11 @@ input.toggler#sideToggler:checked ~ #showInfoBar .arrow#arrow2 {
     button.animSpeed {
         width: 35px;
     }
+
+    canvas#quantityGraph {
+        left: 21px;
+        bottom: 1px;
+    }
 }
+
+/*wykomentowane fragmenty są ustawiane w js*/
