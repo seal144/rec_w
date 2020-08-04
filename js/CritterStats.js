@@ -15,7 +15,7 @@ Critter.speedInit = 1.8; //2.4
 Critter.speedMax = 5.4; //7.2
 //
 Critter.sizeMin = 6; //7// it's diameter of creature
-Critter.sizeInit = 18; //15
+Critter.sizeInit = 18; //21
 Critter.sizeMax = 54; //63
 //
 Critter.sensesMin = 10; // it's radius. fieldOfView = size/2+senses 
@@ -23,7 +23,7 @@ Critter.sensesInit = 40;
 Critter.sensesMax = 160;
 //
 Critter.affinityFactor = .4;
-Critter.sizeThreatFactor = 1.5;
+Critter.sizeThreatFactor = 1.41; //1.5
 Critter.babiesMin = 1;
 Critter.babiesMax = 3;
 Critter.growingTimeS = 5;

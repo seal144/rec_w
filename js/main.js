@@ -67,7 +67,7 @@ main = {
         main.speedX8 = false;
         //
         main.setPlants();
-        main.setCritters()
+        main.setCritters();
         //
         window.addEventListener('keydown', main.onKey, false);
         //
@@ -84,6 +84,7 @@ main = {
         //
         main.ctx.lineWidth = VAR.lineWidh;
         main.ctx.lineJoin = 'round';
+        info.setInfoBar();
     },
     layout: function (ev) {
         console.log('main.layout():skalowanie canvasa w zaleznosci od resiza');
@@ -120,7 +121,7 @@ main = {
     },
     setPlants: function () {
         VAR.startNumberPlants = Math.max(VAR.minNumberPlants, Math.round(VAR.W * VAR.H * .00003));
-        Plant.maxCount = Math.round(VAR.W * VAR.H * 0.00032) //403.968
+        Plant.maxCount = Math.round(VAR.W * VAR.H * Plant.rootsRadius * .95e-5) //420
         for (let i = 0; i < VAR.startNumberPlants; i++) {
             new Plant(random(VAR.margin, VAR.W - VAR.margin), random(VAR.margin, VAR.H - VAR.margin), random(50, 80));
         }
