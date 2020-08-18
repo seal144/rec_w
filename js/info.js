@@ -167,5 +167,5 @@ info = {
         document.querySelector('#infoBar').style.left = '-260px';
         document.querySelector('#infoBar').style.height = String(VAR.H) + 'px';
         document.querySelector('#showInfoBar').style.height = String(VAR.H) + 'px';
-    }
+    },
 };

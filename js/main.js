@@ -45,6 +45,30 @@ function distance(startXY, endXY) {
     return c;
 };
 //
+function shuffleArray(array) {
+    for (e in array) {
+        let temp;
+        let randomIndex = random(0, array.length - 1);
+        temp = array[randomIndex];
+        array[randomIndex] = array[e];
+        array[e] = temp;
+    }
+}
+//
+function copyArray(array) {
+    let copiedArray = [];
+    if (Object.getPrototypeOf(array) !== Array.prototype) {
+        return new Error('function copyArray accepts only array');
+    }
+    for (e in array) {
+        if (array[e] instanceof Object) {
+            return new Error('datatypes in array in function copyArray have to be primitive');
+        }
+        copiedArray[e] = array[e];
+    }
+    return copiedArray;
+}
+//
 main = {
     init: function () {
         main.canvas = document.createElement('canvas');
@@ -55,7 +79,7 @@ main = {
         document.getElementById('stop').addEventListener('click', main.startStop, false);
         document.getElementById('x2').addEventListener('click', main.x2, false);
         document.getElementById('x4').addEventListener('click', main.x4, false);
-        document.getElementById('x8').addEventListener('click', main.x8, false);
+        document.getElementById('x10').addEventListener('click', main.x10, false);
         //
         document.body.appendChild(main.canvas);
         //
@@ -64,7 +88,7 @@ main = {
         main.stop = false;
         main.speedX2 = false;
         main.speedX4 = false;
-        main.speedX8 = false;
+        main.speedX10 = false;
         //
         main.setPlants();
         main.setCritters();
@@ -73,9 +97,16 @@ main = {
         //
         main.animation = setInterval(main.animationLoop, 1000 / VAR.fps);
         VAR.timerNewPlant = VAR.addPlantSeconds * VAR.normalFps;
+        // 
+        for (e in Species.namesTemplate) {
+            Species.names[e] = copyArray(Species.namesTemplate[e]);
+        };
+        for (e in Species.names) {
+            shuffleArray(Species.names[e]);
+        }
     },
     setLayout: function () {
-        VAR.W = Math.max(window.innerWidth, VAR.minW);
+        VAR.W = Math.max( /*window.innerWidth*/ document.body.clientWidth, VAR.minW);
         VAR.H = Math.max(window.innerHeight, VAR.minH);
         VAR.D = Math.min(VAR.W, VAR.H);
         //
@@ -121,7 +152,7 @@ main = {
     },
     setPlants: function () {
         VAR.startNumberPlants = Math.max(VAR.minNumberPlants, Math.round(VAR.W * VAR.H * .00003));
-        Plant.maxCount = Math.round(VAR.W * VAR.H * Plant.rootsRadius * .95e-5) //420
+        Plant.maxCount = Math.round(VAR.W * VAR.H * (1 / Plant.rootsRadius) * 0.0115) //415
         for (let i = 0; i < VAR.startNumberPlants; i++) {
             new Plant(random(VAR.margin, VAR.W - VAR.margin), random(VAR.margin, VAR.H - VAR.margin), random(50, 80));
         }
@@ -131,6 +162,7 @@ main = {
         for (let i = 0; i < VAR.startNumberCritters; i++) {
             new Critter(random(VAR.margin, VAR.W - VAR.margin), random(VAR.margin, VAR.H - VAR.margin));
         }
+        Critter.speciesCheckUpdate()
     },
     startStop: function () {
         if (!main.stop) {
@@ -151,10 +183,10 @@ main = {
             }
             main.speedX2 = true;
             main.speedX4 = false;
-            main.speedX8 = false;
+            main.speedX10 = false;
             document.getElementById('x2').innerHTML = 'X1';
             document.getElementById('x4').innerHTML = 'X4';
-            document.getElementById('x8').innerHTML = 'X8';
+            document.getElementById('x10').innerHTML = 'X10';
             VAR.fps = VAR.normalFps * 2;
             clearInterval(main.animation);
             main.animation = setInterval(main.animationLoop, 1000 / VAR.fps);
@@ -178,10 +210,10 @@ main = {
             }
             main.speedX4 = true;
             main.speedX2 = false;
-            main.speedX8 = false;
+            main.speedX10 = false;
             document.getElementById('x4').innerHTML = 'X1';
             document.getElementById('x2').innerHTML = 'X2';
-            document.getElementById('x8').innerHTML = 'X8';
+            document.getElementById('x10').innerHTML = 'X10';
             VAR.fps = VAR.normalFps * 4;
             clearInterval(main.animation)
             main.animation = setInterval(main.animationLoop, 1000 / VAR.fps);
@@ -197,19 +229,19 @@ main = {
             main.animation = setInterval(main.animationLoop, 1000 / VAR.fps);
         }
     },
-    x8: function () {
-        if (!main.speedX8) {
+    x10: function () {
+        if (!main.speedX10) {
             if (main.stop) {
                 main.stop = false;
                 document.getElementById('stop').innerHTML = 'STOP';
             }
-            main.speedX8 = true;
+            main.speedX10 = true;
             main.speedX2 = false;
             main.speedX4 = false;
-            document.getElementById('x8').innerHTML = 'X1';
+            document.getElementById('x10').innerHTML = 'X1';
             document.getElementById('x2').innerHTML = 'X2';
             document.getElementById('x4').innerHTML = 'X4';
-            VAR.fps = VAR.normalFps * 8;
+            VAR.fps = VAR.normalFps * 10;
             clearInterval(main.animation)
             main.animation = setInterval(main.animationLoop, 1000 / VAR.fps);
         } else {
@@ -217,8 +249,8 @@ main = {
                 main.stop = false;
                 document.getElementById('stop').innerHTML = 'STOP';
             }
-            main.speedX8 = false;
-            document.getElementById('x8').innerHTML = 'X8';
+            main.speedX10 = false;
+            document.getElementById('x10').innerHTML = 'X10';
             VAR.fps = VAR.normalFps;
             clearInterval(main.animation)
             main.animation = setInterval(main.animationLoop, 1000 / VAR.fps);
@@ -232,16 +264,16 @@ main = {
             ev.preventDefault();
             if (main.stop) {
                 main.startStop()
-            } else if (!main.speedX2 && !main.speedX4 && !main.speedX8) {
+            } else if (!main.speedX2 && !main.speedX4 && !main.speedX10) {
                 main.x2();
             } else if (main.speedX2) {
                 main.x4();
             } else if (main.speedX4) {
-                main.x8();
+                main.x10();
             }
         } else if (ev.keyCode === 37) {
             ev.preventDefault();
-            if (main.speedX8) {
+            if (main.speedX10) {
                 main.x4()
             } else if (main.speedX4) {
                 main.x2();

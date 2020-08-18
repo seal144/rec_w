@@ -39,7 +39,15 @@ Critter.similarityCheck = function (loverA, loverB) {
     }
     if (!(loverB.genes.aggression >= loverA.genes.aggression - Critter.aggressionSpread && loverB.genes.aggression <= loverA.genes.aggression + Critter.aggressionSpread)) {
         return false;
-        console.log('jest falseaggression', loverA, loverB);
     }
     return true;
+}
+//
+Critter.speciesCheckUpdate = function () {
+    for (e in Species.all) {
+        Species.all[e].population = 0;
+    }
+    for (e in Critter.all) {
+        Critter.all[e].species = Critter.all[e].speciesCheck();
+    }
 }

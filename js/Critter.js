@@ -15,11 +15,13 @@ function Critter(x, y, speed, size, senses, aggression, parentA, parentB) {
     this.genes.size = size ? size : Critter.sizeInit;
     this.genes.senses = senses ? senses : Critter.sensesInit;
     this.genes.aggression = aggression ? aggression : Critter.aggressionInit;
-    this.genes.mainfeature = this.setMainFeature();
-    if (this.parents[0]) {
-        this.genes.targetSize = this.genes.size;
-        this.genes.size = 0;
+    this.genes.ratio = {
+        speed: this.genes.speed / Critter.speedInit,
+        size: this.genes.size / Critter.sizeInit,
+        senses: this.genes.senses / Critter.sensesInit,
+        aggression: this.genes.aggression / Critter.aggressionInit
     }
+    this.genes.mainfeature = this.setMainFeature();
     //
     this.hungryAtEnergy = this.genes.size / Critter.sizeInit * 200 + 400; // init:600
     this.hornyAtEnergy = this.genes.size / Critter.sizeInit * 267 + 533; // init:800
@@ -43,18 +45,22 @@ function Critter(x, y, speed, size, senses, aggression, parentA, parentB) {
         copulate: 0,
         liveTime: ((300 + random(-30, +30)) + ((1 - this.genes.speed / Critter.speedMax) * 60)) * VAR.normalFps,
     };
+    //
+    this.species = this.speciesCheck();
+    //must be on the end of constructor
+    if (this.parents[0]) {
+        this.genes.targetSize = this.genes.size;
+        this.genes.size = 0;
+    }
 }
 //
 Critter.prototype.setMainFeature = function () {
     const mainFeatureRatio = 1.4;
-    const speedRatio = this.genes.speed / Critter.speedInit;
-    const sizeRatio = this.genes.size / Critter.sizeInit;
-    const sensesRatio = this.genes.senses / Critter.sensesInit;
-    if (speedRatio > 1.2 && speedRatio > sizeRatio * mainFeatureRatio && speedRatio > sensesRatio * mainFeatureRatio) {
+    if (this.genes.ratio.speed > 1.2 && this.genes.ratio.speed > this.genes.ratio.size * mainFeatureRatio && this.genes.ratio.speed > this.genes.ratio.senses * mainFeatureRatio) {
         return 'speed';
-    } else if (sizeRatio > 1.2 && sizeRatio > speedRatio * mainFeatureRatio && sizeRatio > sensesRatio * mainFeatureRatio) {
+    } else if (this.genes.ratio.size > 1.2 && this.genes.ratio.size > this.genes.ratio.speed * mainFeatureRatio && this.genes.ratio.size > this.genes.ratio.senses * mainFeatureRatio) {
         return 'size';
-    } else if (sensesRatio > 1.2 && sensesRatio > speedRatio * mainFeatureRatio && sensesRatio > sizeRatio * mainFeatureRatio) {
+    } else if (this.genes.ratio.senses > 1.2 && this.genes.ratio.senses > this.genes.ratio.speed * mainFeatureRatio && this.genes.ratio.senses > this.genes.ratio.size * mainFeatureRatio) {
         return 'senses';
     } else {
         return null;
@@ -221,7 +227,7 @@ Critter.prototype.setFillColor = function () {
 //MOVING
 //
 Critter.prototype.energyOutgo = function () {
-    const energyLoss = ((this.genes.speed * 2) * (this.genes.size) + this.genes.senses) * .005;
+    const energyLoss = ((this.genes.speed * 1.6) * (this.genes.size * 1.2) + this.genes.senses) * .005;
     //(1.8 * 1.3) * (18 * 1.2) + 40 * 0.005 = 0.453 (100energy spala w ~11.0s)
     //2.4*21+40*0.005 = 0.452 (100energy spala w ~11.1s)
     this.energy -= energyLoss;
@@ -478,7 +484,10 @@ Critter.prototype.dying = function () {
     this.drawing.ayeColor = this.setAyeColor();
     this.drawing.fillColor = this.setFillColor();
     if (this.drawing.transparency > 0) this.drawing.transparency -= .01;
-    else delete Critter.all[this.id];
+    else {
+        Species.all[this.species].population -= 1;
+        delete Critter.all[this.id];
+    }
 }
 //
 Critter.prototype.nearBorderAction = function () {
@@ -613,8 +622,39 @@ Critter.prototype.setTimer = function (timer) {
         return VAR.normalFps * .5 / (this.genes.speed / Critter.speedInit);
     }
 }
+//dwa problemy. jak jest deklaracja update gatunków to łapie size rosnących, po drugie pierwszemu critterowi w petli nadaje gatunek undefined (chyba pierwszemu)
+//
+Critter.prototype.speciesCheck = function () {
+    let relatedSpecies = [];
+    let mostRelatedSpecies = null;
+    for (e in Species.all) {
+        if (Critter.similarityCheck(this, Species.all[e])) {
+            relatedSpecies.push(Species.all[e]);
+        }
+    }
+    if (relatedSpecies.length === 0) {
+        new Species(this);
+        return Critter.speciesCheckUpdate();
+    } else {
+        for (e in relatedSpecies) {
+            if (!mostRelatedSpecies) {
+                mostRelatedSpecies = relatedSpecies[e];
+            } else {
+                let bestRelationFactor = Math.abs(mostRelatedSpecies.genes.ratio.speed - this.genes.ratio.speed) + Math.abs(mostRelatedSpecies.genes.ratio.size - this.genes.ratio.size) + Math.abs(mostRelatedSpecies.genes.ratio.senses - this.genes.ratio.senses) + (Math.abs(mostRelatedSpecies.genes.ratio.aggression - this.genes.ratio.aggression) * .25);
+                let currentRelationFactor = Math.abs(relatedSpecies[e].genes.ratio.speed - this.genes.ratio.speed) + Math.abs(relatedSpecies[e].genes.ratio.size - this.genes.ratio.size) + Math.abs(relatedSpecies[e].genes.ratio.senses - this.genes.ratio.senses) + (Math.abs(relatedSpecies[e].genes.ratio.aggression - this.genes.ratio.aggression) * .25)
+                if (currentRelationFactor < mostRelatedSpecies) {
+                    mostRelatedSpecies = currentRelationFactor;
+                }
+            }
+        }
+        mostRelatedSpecies.population++;
+        console.log(mostRelatedSpecies);
+        return mostRelatedSpecies.name;
+    }
+}
 //
 //PROBLEMY:
+//jakas nieprawidłowość przy hungryAtEnergy, hornyAtEnergy, sexEnergyLoss ZBADAĆ TEMAT
 //zwierzaki wchodzą w dziwny taniec godowy
 //stworzyć gatunki
 //zrobić main menu
