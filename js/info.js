@@ -42,28 +42,14 @@ info = {
         let avarege;
         let numberOfCritters = Object.keys(Critter.all).length;
         for (e in Critter.all) {
-            let ifGrowing = feature === 'size' && Critter.all[e].genes.targetSize ? true : false;
             if (!highest) {
-                if (ifGrowing) {
-                    highest = Critter.all[e].genes.targetSize;
-                    lowest = Critter.all[e].genes.targetSize;
-                } else {
-                    highest = Critter.all[e].genes[feature];
-                    lowest = Critter.all[e].genes[feature];
-                }
+                highest = Critter.all[e].genes[feature];
+                lowest = Critter.all[e].genes[feature];
             } else {
-                if (ifGrowing) {
-                    Critter.all[e].genes.targetSize > highest ? highest = Critter.all[e].genes.targetSize : Critter.all[e].genes.targetSize < lowest ? lowest = Critter.all[e].genes.targetSize : null;
-                } else {
-                    Critter.all[e].genes[feature] > highest ? highest = Critter.all[e].genes[feature] : Critter.all[e].genes[feature] < lowest ? lowest = Critter.all[e].genes[feature] : null;
-                }
+                Critter.all[e].genes[feature] > highest ? highest = Critter.all[e].genes[feature] : Critter.all[e].genes[feature] < lowest ? lowest = Critter.all[e].genes[feature] : null;
             }
-            if (ifGrowing) {
-                sum += Critter.all[e].genes.targetSize / Critter[feature + 'Init'];
-            } else {
-                sum += Critter.all[e].genes[feature] / Critter[feature + 'Init'];
-                count++;
-            }
+            sum += Critter.all[e].genes[feature] / Critter[feature + 'Init'];
+            count++;
         }
         highest = Math.round((highest / Critter[feature + 'Init']) * 100) / 100;
         lowest = Math.round((lowest / Critter[feature + 'Init']) * 100) / 100;
@@ -145,7 +131,8 @@ info = {
             document.querySelector('canvas#quantityGraph').style.left = '21px';
             document.querySelector('canvas#quantityGraph').style.bottom = '1px';
         } else {
-            document.querySelector('#infoBar').style.width = '260px';
+            //document.querySelector('#infoBar').style.width = '260px';
+            document.querySelector('#infoBar').setAttribute('style', 'width:260px');
             //
             document.querySelector('#statsNames').style.padding = '2rem';
             document.querySelector('#statsNames').style.width = '240px';
@@ -167,5 +154,5 @@ info = {
         document.querySelector('#infoBar').style.left = '-260px';
         document.querySelector('#infoBar').style.height = String(VAR.H) + 'px';
         document.querySelector('#showInfoBar').style.height = String(VAR.H) + 'px';
-    }
+    },
 };

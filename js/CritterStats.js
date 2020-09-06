@@ -22,7 +22,7 @@ Critter.sensesMin = 10; // it's radius. fieldOfView = size/2+senses
 Critter.sensesInit = 40;
 Critter.sensesMax = 160;
 //
-Critter.affinityFactor = .4;
+Critter.affinityFactor = .3; //.4 for a very long time
 Critter.sizeThreatFactor = 1.41; //1.5
 Critter.babiesMin = 1;
 Critter.babiesMax = 3;
@@ -39,7 +39,13 @@ Critter.similarityCheck = function (loverA, loverB) {
     }
     if (!(loverB.genes.aggression >= loverA.genes.aggression - Critter.aggressionSpread && loverB.genes.aggression <= loverA.genes.aggression + Critter.aggressionSpread)) {
         return false;
-        console.log('jest falseaggression', loverA, loverB);
     }
     return true;
+}
+//
+Critter.relationFactor = function (critterA, critterB) {
+    const ratioA = critterA.genes.ratio;
+    const ratioB = critterB.genes.ratio;
+    const relationFactor = Math.abs(ratioA.speed - ratioB.speed) + Math.abs(ratioA.size - ratioB.size) + Math.abs(ratioA.senses - ratioB.senses) + (Math.abs(ratioA.aggression - ratioB.aggression) * .25)
+    return relationFactor;
 }

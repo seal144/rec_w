@@ -18,6 +18,58 @@ body {
     /*overflow-x: hidden;*/
 }
 
+div#species {
+    position: absolute;
+    top: 100vh;
+    /*JS*/
+    padding: 1rem;
+    width: 90vw;
+    /*JS*/
+}
+
+div#species h1 {
+    font-size: 1.8rem;
+    line-height: 3rem;
+    margin: .5rem;
+}
+
+div#species .speciesLabel {
+    position: relative;
+    display: inline-block;
+    background-color: rgba(150, 150, 50, .5);
+    border: 2px solid white;
+    overflow: hidden;
+    padding: .5rem;
+    margin: .5rem;
+    width: 250px;
+    /*js*/
+}
+
+.speciesLabel h3 {
+    font-size: 1.6rem;
+    text-decoration: underline;
+    text-align: center;
+    margin: .5rem;
+    font-style: italic;
+}
+
+.speciesLabel h4 {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+.speciesLabel h5 {
+    font-size: 1.1rem;
+}
+
+.speciesLabel canvas {
+    position: absolute;
+    top: 6rem;
+    right: 1rem;
+}
+
 canvas {
     position: absolute;
 }
