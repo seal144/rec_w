@@ -116,6 +116,7 @@ main = {
         main.ctx.lineWidth = VAR.lineWidh;
         main.ctx.lineJoin = 'round';
         info.setInfoBar();
+        Species.setLabels();
     },
     layout: function (ev) {
         console.log('main.layout():skalowanie canvasa w zaleznosci od resiza');
@@ -162,7 +163,6 @@ main = {
         for (let i = 0; i < VAR.startNumberCritters; i++) {
             new Critter(random(VAR.margin, VAR.W - VAR.margin), random(VAR.margin, VAR.H - VAR.margin));
         }
-        Critter.speciesCheckUpdate()
     },
     startStop: function () {
         if (!main.stop) {

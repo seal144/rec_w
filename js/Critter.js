@@ -47,10 +47,8 @@ function Critter(x, y, speed, size, senses, aggression, parentA, parentB) {
     };
     //
     this.species = this.speciesCheck();
-    //must be on the end of constructor
     if (this.parents[0]) {
-        this.genes.targetSize = this.genes.size;
-        this.genes.size = 0;
+        this.genes.sizeGrowing = 0.1 * this.genes.size;
     }
 }
 //
@@ -70,8 +68,8 @@ Critter.prototype.setMainFeature = function () {
 //DRAW CRITTER
 //
 Critter.prototype.draw = function () {
-    this.drawBody();
-    this.drawSenses();
+    this.drawBody(main.ctx);
+    this.drawSenses(main.ctx);
     if (this.timer.liveTime <= 0) {
         this.state = 'dying';
     } else {
@@ -87,14 +85,14 @@ Critter.prototype.draw = function () {
     this[this.state]();
 }
 //
-Critter.prototype.drawBody = function () {
-    if (this.state === 'horny' || this.goal instanceof Critter) main.ctx.strokeStyle = 'rgb(255,150,200)'
-    else if (this.state === 'escaping') main.ctx.strokeStyle = 'rgb(255,255,100)'
-    else main.ctx.strokeStyle = 'rgba(255,255,255,' + this.drawing.transparency + ')'
-    main.ctx.fillStyle = this.drawing.fillColor;
+Critter.prototype.drawBody = function (ctx) {
+    if (this.state === 'horny' || this.goal instanceof Critter) ctx.strokeStyle = 'rgb(255,150,200)'
+    else if (this.state === 'escaping') ctx.strokeStyle = 'rgb(255,255,100)'
+    else ctx.strokeStyle = 'rgba(255,255,255,' + this.drawing.transparency + ')'
+    ctx.fillStyle = this.drawing.fillColor;
     let sideAlfa = (1 - (this.genes.speed - Critter.speedMax) / (Critter.speedMin - Critter.speedMax)) * 70 + 90;
     let rearsideAlfa = sideAlfa + (180 - sideAlfa) / 2
-    main.ctx.beginPath();
+    ctx.beginPath();
     for (let i = 0; i < 6; i++) {
         let temAlfa
         switch (i) {
@@ -117,46 +115,46 @@ Critter.prototype.drawBody = function () {
                 tempAlfa = this.drawing.alfa - sideAlfa
                 break
         }
-        let xy = modPosition(this.xy, this.genes.size / 2, tempAlfa)
-        i === 0 ? main.ctx.moveTo(xy[0], xy[1]) : main.ctx.lineTo(xy[0], xy[1]);
+        let xy = modPosition(this.xy, (this.genes.sizeGrowing ? (this.genes.sizeGrowing / 2) : (this.genes.size / 2)), tempAlfa)
+        i === 0 ? ctx.moveTo(xy[0], xy[1]) : ctx.lineTo(xy[0], xy[1]);
     }
-    main.ctx.closePath();
-    main.ctx.fill()
-    main.ctx.stroke();
+    ctx.closePath();
+    ctx.fill()
+    ctx.stroke();
     if (this.genes.mainfeature === 'speed') {
-        this.drawStreak();
+        this.drawStreak(ctx);
     } else if (this.genes.mainfeature === 'size') {
-        this.drawStripes(sideAlfa);
+        this.drawStripes(sideAlfa, ctx);
     } else if (this.genes.mainfeature === 'senses' && this.state !== 'growing') {
-        this.drawWhiskers();
+        this.drawWhiskers(ctx);
     }
 }
 //
-Critter.prototype.drawStreak = function () {
-    const faceXY = modPosition(this.xy, this.genes.size / 2, this.drawing.alfa);
-    const backXY = modPosition(this.xy, this.genes.size / 2, this.drawing.alfa + 180);
-    main.ctx.beginPath()
-    main.ctx.moveTo(faceXY[0], faceXY[1]);
-    main.ctx.lineTo(backXY[0], backXY[1]);
-    main.ctx.stroke();
+Critter.prototype.drawStreak = function (ctx) {
+    const faceXY = modPosition(this.xy, (this.genes.sizeGrowing ? (this.genes.sizeGrowing / 2) : (this.genes.size / 2)), this.drawing.alfa);
+    const backXY = modPosition(this.xy, (this.genes.sizeGrowing ? (this.genes.sizeGrowing / 2) : (this.genes.size / 2)), this.drawing.alfa + 180);
+    ctx.beginPath()
+    ctx.moveTo(faceXY[0], faceXY[1]);
+    ctx.lineTo(backXY[0], backXY[1]);
+    ctx.stroke();
 }
 //
-Critter.prototype.drawStripes = function (sideAlfa) {
-    main.ctx.beginPath();
-    main.ctx.moveTo(modPosition(this.xy, this.genes.size / 4, this.drawing.alfa + sideAlfa)[0], modPosition(this.xy, this.genes.size / 4, this.drawing.alfa + sideAlfa)[1]);
-    main.ctx.lineTo(modPosition(this.xy, this.genes.size / 4, this.drawing.alfa - sideAlfa)[0], modPosition(this.xy, this.genes.size / 4, this.drawing.alfa - sideAlfa)[1]);
-    main.ctx.stroke();
-    main.ctx.beginPath()
-    main.ctx.moveTo(modPosition(this.xy, this.genes.size / 3, this.drawing.alfa + (sideAlfa + 40))[0], modPosition(this.xy, this.genes.size / 3, this.drawing.alfa + (sideAlfa + 40))[1]);
-    main.ctx.lineTo(modPosition(this.xy, this.genes.size / 3, this.drawing.alfa - (sideAlfa + 40))[0], modPosition(this.xy, this.genes.size / 3, this.drawing.alfa - (sideAlfa + 40))[1]);
-    main.ctx.stroke()
+Critter.prototype.drawStripes = function (sideAlfa, ctx) {
+    ctx.beginPath();
+    ctx.moveTo(modPosition(this.xy, (this.genes.sizeGrowing ? (this.genes.sizeGrowing / 4) : (this.genes.size / 4)), this.drawing.alfa + sideAlfa)[0], modPosition(this.xy, (this.genes.sizeGrowing ? (this.genes.sizeGrowing / 4) : (this.genes.size / 4)), this.drawing.alfa + sideAlfa)[1]);
+    ctx.lineTo(modPosition(this.xy, (this.genes.sizeGrowing ? (this.genes.sizeGrowing / 4) : (this.genes.size / 4)), this.drawing.alfa - sideAlfa)[0], modPosition(this.xy, (this.genes.sizeGrowing ? (this.genes.sizeGrowing / 4) : (this.genes.size / 4)), this.drawing.alfa - sideAlfa)[1]);
+    ctx.stroke();
+    ctx.beginPath()
+    ctx.moveTo(modPosition(this.xy, (this.genes.sizeGrowing ? (this.genes.sizeGrowing / 3) : (this.genes.size / 3)), this.drawing.alfa + (sideAlfa + 40))[0], modPosition(this.xy, (this.genes.sizeGrowing ? (this.genes.sizeGrowing / 3) : (this.genes.size / 3)), this.drawing.alfa + (sideAlfa + 40))[1]);
+    ctx.lineTo(modPosition(this.xy, (this.genes.sizeGrowing ? (this.genes.sizeGrowing / 3) : (this.genes.size / 3)), this.drawing.alfa - (sideAlfa + 40))[0], modPosition(this.xy, (this.genes.sizeGrowing ? (this.genes.sizeGrowing / 3) : (this.genes.size / 3)), this.drawing.alfa - (sideAlfa + 40))[1]);
+    ctx.stroke()
 }
 //
-Critter.prototype.drawWhiskers = function () {
+Critter.prototype.drawWhiskers = function (ctx) {
     const whiskersLength = this.genes.senses * .15;
     for (let i = 0; i < 2; i++) {
         const aye = i === 0 ? 'left' : 'right';
-        const ayeXY = modPosition(this.xy, this.genes.size / 4, this.drawing.alfa + (i === 0 ? +45 : -45));
+        const ayeXY = modPosition(this.xy, (this.genes.sizeGrowing ? (this.genes.sizeGrowing / 4) : (this.genes.size / 4)), this.drawing.alfa + (i === 0 ? +45 : -45));
         for (let j = 0; j < 3; j++) {
             let tempAlfa;
             switch (j) {
@@ -170,10 +168,26 @@ Critter.prototype.drawWhiskers = function () {
                     tempAlfa = this.drawing.alfa + (aye === 'left' ? +75 : -75);
                     break;
             }
-            main.ctx.beginPath()
-            main.ctx.moveTo(ayeXY[0], ayeXY[1])
-            main.ctx.lineTo(modPosition(ayeXY, whiskersLength, tempAlfa)[0], modPosition(ayeXY, whiskersLength, tempAlfa)[1])
-            main.ctx.stroke();
+            ctx.beginPath()
+            ctx.moveTo(ayeXY[0], ayeXY[1])
+            ctx.lineTo(modPosition(ayeXY, whiskersLength, tempAlfa)[0], modPosition(ayeXY, whiskersLength, tempAlfa)[1])
+            ctx.stroke();
+        }
+    }
+}
+//
+Critter.prototype.drawSenses = function (ctx) {
+    if (this.genes.senses > .1 * Critter.sensesMax) {
+        ctx.fillStyle = this.drawing.ayeColor;
+        if (this.state === 'horny' || this.goal instanceof Critter) ctx.strokeStyle = 'rgb(255,150,200)'
+        else ctx.strokeStyle = 'rgba(255,255,255,' + this.drawing.transparency + ')'
+        for (let i = 0; i < 2; i++) {
+            let xy = modPosition(this.xy, (this.genes.sizeGrowing ? (this.genes.sizeGrowing / 4) : (this.genes.size / 4)), this.drawing.alfa + (i === 0 ? +45 : -45));
+            let ayeSize = (this.genes.size / Critter.sizeMax) * (this.genes.senses / 8);
+            ctx.beginPath();
+            ctx.arc(xy[0], xy[1], ayeSize, Math.PI / 180 * 0, Math.PI / 180 * 360);
+            ctx.fill();
+            ctx.stroke();
         }
     }
 }
@@ -194,22 +208,6 @@ Critter.prototype.drawFieldOfView = function () {
     }
 }
 //
-Critter.prototype.drawSenses = function () {
-    if (this.genes.senses > .1 * Critter.sensesMax) {
-        main.ctx.fillStyle = this.drawing.ayeColor;
-        if (this.state === 'horny' || this.goal instanceof Critter) main.ctx.strokeStyle = 'rgb(255,150,200)'
-        else main.ctx.strokeStyle = 'rgba(255,255,255,' + this.drawing.transparency + ')'
-        for (let i = 0; i < 2; i++) {
-            let xy = modPosition(this.xy, this.genes.size / 4, this.drawing.alfa + (i === 0 ? +45 : -45));
-            let ayeSize = (this.genes.size / Critter.sizeMax) * (this.genes.senses / 8);
-            main.ctx.beginPath();
-            main.ctx.arc(xy[0], xy[1], ayeSize, Math.PI / 180 * 0, Math.PI / 180 * 360);
-            main.ctx.fill();
-            main.ctx.stroke();
-        }
-    }
-}
-//
 //COLOR OF CRITTER
 //
 Critter.prototype.setAyeColor = function () {
@@ -219,7 +217,7 @@ Critter.prototype.setAyeColor = function () {
 //
 Critter.prototype.setFillColor = function () {
     let r = (this.genes.speed / Critter.speedMax) * 250;
-    let g = this.genes.targetSize ? (this.genes.targetSize / Critter.sizeMax) * 250 : (this.genes.size / Critter.sizeMax) * 250;
+    let g = (this.genes.size / Critter.sizeMax) * 250;
     let b = (this.genes.senses / Critter.sensesMax) * 250;
     return 'rgba(' + r + ',' + g + ',' + b + ',' + this.drawing.transparency + ')';
 }
@@ -273,12 +271,11 @@ Critter.prototype.turningInPlace = function () {
 //ACT
 //
 Critter.prototype.growing = function () {
-    if (this.genes.size >= this.genes.targetSize) {
-        this.genes.size = this.genes.targetSize;
-        delete this.genes.targetSize;
+    if (this.genes.sizeGrowing >= this.genes.size) {
+        delete this.genes.sizeGrowing;
         this.state = 'hungry'
     } else {
-        this.genes.size += this.genes.targetSize / VAR.normalFps / Critter.growingTimeS;
+        this.genes.sizeGrowing += this.genes.size / VAR.normalFps / Critter.growingTimeS;
     }
 }
 //
@@ -457,7 +454,7 @@ Critter.prototype.reproduce = function (positionXY, parentA, parentB) {
             }
         }
         const aggressionCase = random(1, 3);
-        const aggressionMod = random(-Critter.aggressionSpread / 2, Critter.aggressionSpread / 2)
+        const aggressionMod = random(-Critter.aggressionSpread * .33, Critter.aggressionSpread * .33)
         if (aggressionCase === 1) {
             babieGenes.aggression = parentA.genes.aggression + aggressionMod;
         } else if (aggressionCase === 2) {
@@ -485,7 +482,8 @@ Critter.prototype.dying = function () {
     this.drawing.fillColor = this.setFillColor();
     if (this.drawing.transparency > 0) this.drawing.transparency -= .01;
     else {
-        Species.all[this.species].population -= 1;
+        //Species.all[this.species].population -= 1;
+        Species.removeIndividual(Species.all[this.species]);
         delete Critter.all[this.id];
     }
 }
@@ -622,7 +620,6 @@ Critter.prototype.setTimer = function (timer) {
         return VAR.normalFps * .5 / (this.genes.speed / Critter.speedInit);
     }
 }
-//dwa problemy. jak jest deklaracja update gatunków to łapie size rosnących, po drugie pierwszemu critterowi w petli nadaje gatunek undefined (chyba pierwszemu)
 //
 Critter.prototype.speciesCheck = function () {
     let relatedSpecies = [];
@@ -634,29 +631,30 @@ Critter.prototype.speciesCheck = function () {
     }
     if (relatedSpecies.length === 0) {
         new Species(this);
-        return Critter.speciesCheckUpdate();
+        return Species.CheckUpdate();
     } else {
         for (e in relatedSpecies) {
             if (!mostRelatedSpecies) {
                 mostRelatedSpecies = relatedSpecies[e];
             } else {
-                let bestRelationFactor = Math.abs(mostRelatedSpecies.genes.ratio.speed - this.genes.ratio.speed) + Math.abs(mostRelatedSpecies.genes.ratio.size - this.genes.ratio.size) + Math.abs(mostRelatedSpecies.genes.ratio.senses - this.genes.ratio.senses) + (Math.abs(mostRelatedSpecies.genes.ratio.aggression - this.genes.ratio.aggression) * .25);
-                let currentRelationFactor = Math.abs(relatedSpecies[e].genes.ratio.speed - this.genes.ratio.speed) + Math.abs(relatedSpecies[e].genes.ratio.size - this.genes.ratio.size) + Math.abs(relatedSpecies[e].genes.ratio.senses - this.genes.ratio.senses) + (Math.abs(relatedSpecies[e].genes.ratio.aggression - this.genes.ratio.aggression) * .25)
-                if (currentRelationFactor < mostRelatedSpecies) {
-                    mostRelatedSpecies = currentRelationFactor;
+                let bestRelationFactor = Critter.relationFactor(this, mostRelatedSpecies);
+                let currentRelationFactor = Critter.relationFactor(this, relatedSpecies[e]);
+                if (currentRelationFactor < bestRelationFactor) {
+                    mostRelatedSpecies = relatedSpecies[e];
                 }
             }
         }
-        mostRelatedSpecies.population++;
-        console.log(mostRelatedSpecies);
+        Species.addIndividual(mostRelatedSpecies);
         return mostRelatedSpecies.name;
     }
 }
+
+
 //
 //PROBLEMY:
-//jakas nieprawidłowość przy hungryAtEnergy, hornyAtEnergy, sexEnergyLoss ZBADAĆ TEMAT
 //zwierzaki wchodzą w dziwny taniec godowy
-//stworzyć gatunki
 //zrobić main menu
 //sprobować w energy loss przerobić geny na stosunek <= nie wiem czy to dbry pomysl
 //VAR.lineWidh - jest blad
+//zrobić responsywność w jakimś malym stopniu
+//umieścić na stronie

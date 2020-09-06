@@ -27,14 +27,21 @@ div#species {
     /*JS*/
 }
 
+div#species h1 {
+    font-size: 1.8rem;
+    line-height: 3rem;
+    margin: .5rem;
+}
+
 div#species .speciesLabel {
+    position: relative;
     display: inline-block;
     background-color: rgba(150, 150, 50, .5);
     border: 2px solid white;
     overflow: hidden;
     padding: .5rem;
     margin: .5rem;
-    width: 300px;
+    width: 250px;
     /*js*/
 }
 
@@ -47,8 +54,20 @@ div#species .speciesLabel {
 }
 
 .speciesLabel h4 {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     text-align: center;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+.speciesLabel h5 {
+    font-size: 1.1rem;
+}
+
+.speciesLabel canvas {
+    position: absolute;
+    top: 6rem;
+    right: 1rem;
 }
 
 canvas {

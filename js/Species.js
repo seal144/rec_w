@@ -33,6 +33,7 @@ Species.all = {}
 Species.last;
 //
 function Species(holotype) {
+    this.holotype = holotype;
     this.population = 0;
     this.genes = {};
     this.genes.speed = holotype.genes.speed;
@@ -45,18 +46,21 @@ function Species(holotype) {
         senses: this.genes.senses / Critter.sensesInit,
         aggression: this.genes.aggression / Critter.aggressionInit,
     }
+    this.generation = holotype.generation;
     if (Object.keys(Species.all).length <= 0) {
         this.name = 'PRIMUM PIONEER'
     } else {
         this.name = this.setName(holotype.genes.mainfeature);
     }
+    //
     Species.count++
     Species.all[this.name] = this;
     Species.last = this;
-    console.log('new Species', this);
+    this.addLabel();
 }
 //
 Species.prototype.setName = function (mainFeature) {
+    console.log(mainFeature);
     Species.refillNamesArrayIfEmpty();
     let name;
     const nameCase1 = random(0, 1);
@@ -97,23 +101,101 @@ Species.prototype.setName = function (mainFeature) {
         name += ' ' + Species.names.neutral.shift();
     }
     name = name.toUpperCase();
+    console.log(name);
     return name;
 };
-
-
-
-
-
-/*
-Species.namesTemplate = {
-    fast: ['celer', 'fulgur', 'ventus', 'lepus', 'caprea', 'struthio', 'cursor', 'equitem'],
-    slow: ['tarda', 'lapis', 'stans', 'testudo', 'cochlea', 'bradypus', 'veternum', 'quod'],
-    big: ['magnum', 'crassus', 'giant', 'elephas', 'bovi', 'bos', 'luctator', 'hippopotamus'],
-    small: ['parvus', 'tenues', 'leprechaun', 'mus', 'musca', 'cricetus', 'infans', 'coccinella'],
-    sharpSenses: ['videt', 'audite', 'sentit', 'plecotus', 'strix', 'falco', 'speculator', 'vulpes'],
-    weekSenses: ['caecus', 'surdi', 'tenebris', 'talpa', 'paramecium', 'aurelia', 'fodiens', 'annelida'],
-    mostAggression: ['homicidam', 'inimicus', 'malus', 'tigris', 'casuarius', 'orca', 'mellivora', 'sus'],
-    leastAggression: ['amica', 'bonum', 'amans', 'suricata', 'dasypus', 'clupea', 'erinaceus', 'papilio'],
-    neutral: ['medicoris', 'patet', 'griseo', 'livia', 'silva', 'aquae', 'caerula', 'tufty', 'esuriit', 'ursa', 'columba', 'equus', 'subtiliter', 'stultus', 'alvo', 'athleta'],
+//
+Species.CheckUpdate = function () {
+    for (e in Species.all) {
+        Species.all[e].population = 0;
+    }
+    for (e in Critter.all) {
+        Critter.all[e].species = Critter.all[e].speciesCheck();
+    }
+    return Species.last.name;
 }
-*/
+//
+Species.prototype.addLabel = function () {
+    let div = document.createElement('div')
+    div.className = 'speciesLabel'
+    div.id = this.name + '_' + String(this.generation);
+    document.querySelector('#species').appendChild(div);
+    //
+    let h3 = document.createElement('h3');
+    h3.className = 'Sname';
+    h3.innerHTML = this.name;
+    div.appendChild(h3);
+    //
+    let h4 = document.createElement('h4');
+    h4.className = 'Sholotype';
+    h4.innerHTML = 'HOLOTYPE:';
+    div.appendChild(h4);
+    //
+    div.appendChild(Species.addH5('speed', this));
+    div.appendChild(Species.addH5('size', this));
+    div.appendChild(Species.addH5('senses', this));
+    div.appendChild(Species.addH5('aggression', this));
+    div.appendChild(Species.addH5('generation', this));
+    //
+    let h4pop = document.createElement('h4');
+    h4pop.className = 'Spopulation';
+    h4pop.innerHTML = 'POPULATION:';
+    div.appendChild(h4pop);
+    //
+    div.appendChild(Species.addPhantom(this))
+}
+//
+Species.addH5 = function (statistic, holotype) {
+    let h5 = document.createElement('h5');
+    h5.className = 'S' + statistic;
+    if (statistic === 'population' || statistic === 'generation') {
+        h5.innerHTML = statistic.toUpperCase() + ': ' + String(holotype[statistic])
+    } else {
+        h5.innerHTML = statistic.toUpperCase() + ': ' + String(Math.round(holotype.genes.ratio[statistic] * 100) / 100);
+    }
+    return h5;
+}
+//
+Species.addPhantom = function (spec) {
+    const canvas = document.createElement('canvas');
+    ctx = canvas.getContext('2d')
+    canvas.width = 70;
+    canvas.height = 70;
+    ctx.lineWidth = VAR.lineWidh;
+    ctx.lineJoin = 'round';
+    canvas.className = 'Sphantom';
+    //
+    ctx.fillStyle = 'rgb(0,0,0)';
+    ctx.fillRect(0, 0, main.canvas.width, main.canvas.height);
+    //
+    const tempXY = spec.holotype.xy;
+    const tempAlfa = spec.holotype.drawing.alfa;
+    spec.holotype.xy = [35, 35];
+    spec.holotype.drawing.alfa = 180;
+    spec.holotype.drawBody(ctx);
+    spec.holotype.drawSenses(ctx);
+    spec.holotype.xy = tempXY;
+    spec.holotype.drawing.alfa = tempAlfa;
+    //
+    return canvas;
+}
+//
+Species.addIndividual = function (species) {
+    species.population++;
+    document.getElementById(species.name + '_' + species.generation).querySelector('.Spopulation').innerHTML = 'POPULATION: ' + species.population;
+}
+//
+Species.removeIndividual = function (species) {
+    const speciesTag = document.getElementById(species.name + '_' + species.generation);
+    species.population--;
+    if (species.population <= 0) {
+        delete Species.all[species.name];
+        document.getElementById('species').removeChild(speciesTag);
+    } else {
+        document.getElementById(species.name + '_' + species.generation).querySelector('.Spopulation').innerHTML = 'POPULATION: ' + species.population;
+    }
+}
+//
+Species.setLabels = function () {
+    document.querySelector('div#species').style.top = String(VAR.H) + 'px'
+}
