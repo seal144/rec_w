@@ -4,10 +4,11 @@ Plant.producingSeedsCount = 0;
 Plant.all = {};
 Plant.maxEnergy = 100;
 Plant.reproduceAtEnergy = 70;
-Plant.rootsRadius = 35; //30 //21
+Plant.rootsRadius = window.sessionStorage.densityOfPlantsRatio ? window.sessionStorage.densityOfPlantsRatio * 140 : 35;
 Plant.childCount = 1;
 Plant.maxReproduceCount = 4;
 Plant.maxCount = 0; //nadpisane w main.setPlants
+Plant.findSpotAttempt = 3 //update in main.animationLoop
 //
 Plant.ifTooClose = function (plantsAll, MaxDistance, seedXY) {
     for (e in plantsAll) {
@@ -17,7 +18,17 @@ Plant.ifTooClose = function (plantsAll, MaxDistance, seedXY) {
         }
     }
     return false;
-
+}
+//
+Plant.setFindSpotAttempt = function () {
+    const plantCount = Object.keys(Plant.all).length;
+    if (plantCount < 300) {
+        return 3;
+    } else if (plantCount < 500) {
+        return 2;
+    } else {
+        return 1;
+    }
 }
 //
 function Plant(x, y, energy) {
@@ -36,7 +47,7 @@ Plant.prototype.draw = function () {
     main.ctx.strokeStyle = 'white';
     main.ctx.beginPath()
     for (i = 0; i < this.leafsAngles.length; i++) {
-        let pointXY = modPosition(this.xy, this.energy * .08, this.leafsAngles[i]) //długość liści (*.1)
+        let pointXY = modPosition(this.xy, this.energy * .08, this.leafsAngles[i])
         main.ctx.moveTo(this.xy[0], this.xy[1]);
         main.ctx.lineTo(pointXY[0], pointXY[1]);
     }
@@ -56,10 +67,10 @@ Plant.prototype.draw = function () {
 }
 //
 Plant.prototype.grow = function () {
-    this.energy += .1; //.2
+    this.energy += .1;
 }
 Plant.prototype.reduce = function () {
-    this.energy -= .1; //.2
+    this.energy -= .1;
 }
 //
 Plant.prototype.setLeafsAngles = function () {

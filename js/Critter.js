@@ -46,19 +46,21 @@ function Critter(x, y, speed, size, senses, aggression, parentA, parentB) {
         liveTime: ((300 + random(-30, +30)) + ((1 - this.genes.speed / Critter.speedMax) * 60)) * VAR.normalFps,
     };
     //
-    this.species = this.speciesCheck();
+    if (VAR.simulation) {
+        this.species = this.speciesCheck();
+    }
     if (this.parents[0]) {
         this.genes.sizeGrowing = 0.1 * this.genes.size;
     }
 }
 //
 Critter.prototype.setMainFeature = function () {
-    const mainFeatureRatio = 1.4;
-    if (this.genes.ratio.speed > 1.2 && this.genes.ratio.speed > this.genes.ratio.size * mainFeatureRatio && this.genes.ratio.speed > this.genes.ratio.senses * mainFeatureRatio) {
+    const mainFeatureRatio = 1.2;
+    if (this.genes.ratio.speed > 1.1 && this.genes.ratio.speed > this.genes.ratio.size * mainFeatureRatio && this.genes.ratio.speed > this.genes.ratio.senses * mainFeatureRatio) {
         return 'speed';
-    } else if (this.genes.ratio.size > 1.2 && this.genes.ratio.size > this.genes.ratio.speed * mainFeatureRatio && this.genes.ratio.size > this.genes.ratio.senses * mainFeatureRatio) {
+    } else if (this.genes.ratio.size > 1.1 && this.genes.ratio.size > this.genes.ratio.speed * mainFeatureRatio && this.genes.ratio.size > this.genes.ratio.senses * mainFeatureRatio) {
         return 'size';
-    } else if (this.genes.ratio.senses > 1.2 && this.genes.ratio.senses > this.genes.ratio.speed * mainFeatureRatio && this.genes.ratio.senses > this.genes.ratio.size * mainFeatureRatio) {
+    } else if (this.genes.ratio.senses > 1.1 && this.genes.ratio.senses > this.genes.ratio.speed * mainFeatureRatio && this.genes.ratio.senses > this.genes.ratio.size * mainFeatureRatio) {
         return 'senses';
     } else {
         return null;
@@ -76,9 +78,13 @@ Critter.prototype.draw = function () {
         this.timer.liveTime -= 1;
     }
     if (this.state != 'dying' && this.state != 'growing') {
-        this.drawFieldOfView();
+        if (VAR.simulation) {
+            this.drawFieldOfView();
+        }
         if (this.timer.lookForThreat <= 0) {
-            this.lookForThreat();
+            if (VAR.simulation) {
+                this.lookForThreat();
+            }
             this.timer.lookForThreat = this.setTimer('lookForThreat');
         } else this.timer.lookForThreat -= 1
     }
@@ -90,7 +96,7 @@ Critter.prototype.drawBody = function (ctx) {
     else if (this.state === 'escaping') ctx.strokeStyle = 'rgb(255,255,100)'
     else ctx.strokeStyle = 'rgba(255,255,255,' + this.drawing.transparency + ')'
     ctx.fillStyle = this.drawing.fillColor;
-    let sideAlfa = (1 - (this.genes.speed - Critter.speedMax) / (Critter.speedMin - Critter.speedMax)) * 70 + 90;
+    let sideAlfa = (1 - (this.genes.speed - Critter.speedMax) / (Critter.speedMin - Critter.speedMax)) * 100 + 80;
     let rearsideAlfa = sideAlfa + (180 - sideAlfa) / 2
     ctx.beginPath();
     for (let i = 0; i < 6; i++) {
@@ -151,7 +157,7 @@ Critter.prototype.drawStripes = function (sideAlfa, ctx) {
 }
 //
 Critter.prototype.drawWhiskers = function (ctx) {
-    const whiskersLength = this.genes.senses * .15;
+    const whiskersLength = this.genes.senses / 8;
     for (let i = 0; i < 2; i++) {
         const aye = i === 0 ? 'left' : 'right';
         const ayeXY = modPosition(this.xy, (this.genes.sizeGrowing ? (this.genes.sizeGrowing / 4) : (this.genes.size / 4)), this.drawing.alfa + (i === 0 ? +45 : -45));
@@ -183,7 +189,7 @@ Critter.prototype.drawSenses = function (ctx) {
         else ctx.strokeStyle = 'rgba(255,255,255,' + this.drawing.transparency + ')'
         for (let i = 0; i < 2; i++) {
             let xy = modPosition(this.xy, (this.genes.sizeGrowing ? (this.genes.sizeGrowing / 4) : (this.genes.size / 4)), this.drawing.alfa + (i === 0 ? +45 : -45));
-            let ayeSize = (this.genes.size / Critter.sizeMax) * (this.genes.senses / 8);
+            let ayeSize = (this.genes.size / Critter.sizeMax) * (this.genes.senses / 12);
             ctx.beginPath();
             ctx.arc(xy[0], xy[1], ayeSize, Math.PI / 180 * 0, Math.PI / 180 * 360);
             ctx.fill();
@@ -216,16 +222,17 @@ Critter.prototype.setAyeColor = function () {
 }
 //
 Critter.prototype.setFillColor = function () {
-    let r = (this.genes.speed / Critter.speedMax) * 250;
-    let g = (this.genes.size / Critter.sizeMax) * 250;
-    let b = (this.genes.senses / Critter.sensesMax) * 250;
+    let r = (this.genes.speed / Critter.speedMax) * 255;
+    let g = (this.genes.size / Critter.sizeMax) * 255;
+    let b = (this.genes.senses / Critter.sensesMax) * 255;
     return 'rgba(' + r + ',' + g + ',' + b + ',' + this.drawing.transparency + ')';
 }
 //
 //MOVING
 //
 Critter.prototype.energyOutgo = function () {
-    const energyLoss = ((this.genes.speed * 1.6) * (this.genes.size * 1.2) + this.genes.senses) * .005;
+    const energyLoss = ((this.genes.speed * 2.5) * (this.genes.size * 1) + this.genes.senses) * .0035;
+    // const energyLoss = ((this.genes.speed * 1.6) * (this.genes.size * 1.2) + this.genes.senses) * .005;
     //(1.8 * 1.3) * (18 * 1.2) + 40 * 0.005 = 0.453 (100energy spala w ~11.0s)
     //2.4*21+40*0.005 = 0.452 (100energy spala w ~11.1s)
     this.energy -= energyLoss;
@@ -300,6 +307,11 @@ Critter.prototype.hungry = function () {
 }
 //
 Critter.prototype.horny = function () {
+    if (window.sessionStorage.endlessEvolution && Object.keys(Critter.all).length === 1) {
+        this.reproduce(this.xy, this, this);
+        this.energy -= this.sexEnergyLoss;
+        this.state = 'hungry';
+    }
     this.seeking('lover');
 }
 //
@@ -437,14 +449,17 @@ Critter.prototype.copulating = function (time) {
 }
 //
 Critter.prototype.reproduce = function (positionXY, parentA, parentB) {
-    const babiesCount = Object.keys(Critter.all).length * 4 > Object.keys(Plant.all).length ? 0 : Object.keys(Critter.all).length < Math.round(VAR.startNumberCritters * .75) ? Critter.babiesMax : random(Critter.babiesMin, Critter.babiesMax);
+    let babiesCount = Object.keys(Critter.all).length * 4 > Object.keys(Plant.all).length ? 0 : Object.keys(Critter.all).length < Math.round(VAR.startNumberCritters * .75) ? Critter.babiesMax : random(Critter.babiesMin, Critter.babiesMax);
+    if (Object.keys(Critter.all).length === 1) {
+        babiesCount += 2;
+    }
     for (let i = 0; i < babiesCount; i++) {
         const bXY = [positionXY[0] + random(-parentA.genes.size / 2, parentA.genes.size / 2), positionXY[1] + random(-parentA.genes.size / 2, parentA.genes.size / 2)];
         let babieGenes = {}
         for (let j = 0; j < 3; j++) {
             const inheritanceCase = random(1, 3);
             const feature = j === 0 ? 'speed' : j === 1 ? 'size' : 'senses';
-            const featureMod = 1 + random(-(Critter.affinityFactor * .33 * 100), Critter.affinityFactor * .33 * 100) * .01;
+            const featureMod = 1 + random(-(Critter.affinityFactor * Critter.geneMutationRate * 100), Critter.affinityFactor * Critter.geneMutationRate * 100) * .01;
             if (inheritanceCase === 1) {
                 babieGenes[feature] = parentA.genes[feature] * featureMod;
             } else if (inheritanceCase === 2) {
@@ -454,7 +469,7 @@ Critter.prototype.reproduce = function (positionXY, parentA, parentB) {
             }
         }
         const aggressionCase = random(1, 3);
-        const aggressionMod = random(-Critter.aggressionSpread * .33, Critter.aggressionSpread * .33)
+        const aggressionMod = random(-Critter.aggressionSpread * Critter.geneMutationRate, Critter.aggressionSpread * Critter.geneMutationRate)
         if (aggressionCase === 1) {
             babieGenes.aggression = parentA.genes.aggression + aggressionMod;
         } else if (aggressionCase === 2) {
@@ -477,13 +492,17 @@ Critter.prototype.reproduce = function (positionXY, parentA, parentB) {
 }
 //
 Critter.prototype.dying = function () {
+    if (window.sessionStorage.endlessEvolution && Object.keys(Critter.all).length === 1) {
+        this.reproduce(this.xy, this, this)
+    }
     this.eraseFromRecords();
     this.drawing.ayeColor = this.setAyeColor();
     this.drawing.fillColor = this.setFillColor();
     if (this.drawing.transparency > 0) this.drawing.transparency -= .01;
     else {
-        //Species.all[this.species].population -= 1;
-        Species.removeIndividual(Species.all[this.species]);
+        if (VAR.simulation) {
+            Species.removeIndividual(Species.all[this.species]);
+        }
         delete Critter.all[this.id];
     }
 }
@@ -658,3 +677,13 @@ Critter.prototype.speciesCheck = function () {
 //VAR.lineWidh - jest blad
 //zrobić responsywność w jakimś malym stopniu
 //umieścić na stronie
+//możiwe opcje modyfikacji: gęstość roślin, szybkość ewolucji, startowe geny stworzeń
+//nie maluja sie wasy na etykietach
+// czasami etykiety nie są aktualizowane
+// zrobić responsywność do menu
+//moze warto zeby gdzies byla informacja o ustawieniach swiata
+//moeze etykiety zrobic przynajmniej z jednym progiem responsywności
+// jest problem przy malym menu nie mozna kliknac na ikonki
+//zrobic zeby density ratio standardowe wynosilo 1
+// oslabic troche speed of evolution
+// zrobić commita że menu zostalo dodane

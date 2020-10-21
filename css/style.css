@@ -1,8 +1,10 @@
 :root {
     --ziel: rgba(85, 107, 47, .5);
+    --ziel2: rgba(85, 107, 47, .8);
     --nieb: rgba(0, 47, 107, .5);
     --buttonBorder: 2px solid rgba(255, 255, 255, .5);
     --napisy: rgba(255, 230, 100, .8);
+    --infoBackground: rgba(0, 100, 100, .5);
 }
 
 * {
@@ -18,18 +20,25 @@ body {
     /*overflow-x: hidden;*/
 }
 
-div#species {
+p#auxiliary_line {
     position: absolute;
     top: 100vh;
-    /*JS*/
+    opacity: 0;
+}
+
+div#species {
+    position: absolute;
     padding: 1rem;
-    width: 90vw;
     /*JS*/
+}
+
+div#species:hover {
+    cursor: default;
 }
 
 div#species h1 {
     font-size: 1.8rem;
-    line-height: 3rem;
+    line-height: 2rem;
     margin: .5rem;
 }
 
@@ -41,8 +50,7 @@ div#species .speciesLabel {
     overflow: hidden;
     padding: .5rem;
     margin: .5rem;
-    width: 250px;
-    /*js*/
+    width: 240px;
 }
 
 .speciesLabel h3 {
@@ -56,22 +64,28 @@ div#species .speciesLabel {
 .speciesLabel h4 {
     font-size: 1.2rem;
     text-align: center;
-    margin-bottom: 1rem;
-    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    margin-top: 1.2rem;
+}
+
+.speciesLabel h4.Spopulation {
+    margin-bottom: 0rem;
 }
 
 .speciesLabel h5 {
     font-size: 1.1rem;
+    margin-left: 2rem;
 }
 
 .speciesLabel canvas {
     position: absolute;
-    top: 6rem;
-    right: 1rem;
+    top: 6.5rem;
+    right: 2rem;
 }
 
 canvas {
     position: absolute;
+    z-index: 1;
 }
 
 canvas#quantityGraph {
@@ -82,16 +96,149 @@ canvas#quantityGraph {
     border: 1px solid white;
 }
 
-#infoBar {
+div#mainMenuWrap {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--napisy);
+}
+
+div.infoBackground {
+    z-index: 3;
+    background-color: var(--infoBackground);
+    overflow: hidden;
+    transition: all .5s ease;
+}
+
+div#mainMenuWrap div.infoBackground {
+    position: absolute;
+    padding: 5rem;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    transition: all .8s ease
+}
+
+div#mainMenuWrap div.infoBackground p {
+    font-size: 1.5rem;
+    width: 60vw;
+    margin-bottom: 1rem;
+}
+
+div#mainMenuWrap div.infoBackground p.center {
+    text-align: center;
+}
+
+div#mainMenuWrap div.infoBackground h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+div#mainMenuWrap div.infoBackground h3 {
+    font-size: 1.8rem;
+    text-align: center;
+}
+
+div#mainMenuWrap #about,
+div#mainMenuWrap #settings {
+    transform: translateY(-100vh);
+    opacity: 0;
+}
+
+div#settings #startGenesContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+div#settings #startGenesContainer .featureInputContainer {
+    width: 14rem;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+div#settings #startGenesContainer .featureInputContainer input {
+    width: 6rem;
+    text-align: center;
+    font-size: 1.5rem;
+    background-color: var(--nieb);
+    color: var(--napisy);
+}
+
+div#settings #startGenesContainer .featureInputContainer p {
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+div#settings .selectionBar {
+    display: flex;
+    flex-direction: row;
+}
+
+div#settings .rectangle {
+    background-color: var(--napisy);
+    margin: .5rem .2rem 1.5rem;
+    height: 3rem;
+    width: 1.5rem;
+    opacity: .1;
+}
+
+div#settings .leftTriangle {
+    margin: .5rem .2rem 1.5rem;
+    width: 0;
+    height: 0;
+    border-top: 1.5rem solid transparent;
+    border-right: 2rem solid var(--ziel2);
+    border-bottom: 1.5rem solid transparent
+}
+
+div#settings .rightTriangle {
+    margin: .5rem .2rem 1.5rem;
+    width: 0;
+    height: 0;
+    border-top: 1.5rem solid transparent;
+    border-left: 2rem solid var(--ziel2);
+    border-bottom: 1.5rem solid transparent
+}
+
+div#settings .leftTriangle:hover,
+div#settings .rightTriangle:hover {
+    cursor: pointer;
+}
+
+div#settings .leftTriangle:hover {
+    border-right: 2rem solid rgba(255, 255, 255, .7);
+}
+
+div#settings .rightTriangle:hover {
+    border-left: 2rem solid rgba(255, 255, 255, .7);
+}
+
+div#settings .active {
+    opacity: .8;
+    border: 2px solid var(--ziel2);
+}
+
+div#settings button#endlessEvolution {
+    font-size: 1.3rem;
+    width: 5rem;
+    padding: .5rem;
+    margin: .5rem .2rem 1.5rem;
+
+}
+
+div#infoBar {
     position: absolute;
     top: 0;
     /*left: -260px;*/
     /*width: 260px;*/
     /*height: 100vh;*/
-    z-index: 1;
-    background-color: rgba(0, 100, 100, .5);
-    overflow: hidden;
-    transition: all .5s ease;
 }
 
 #buttons {
@@ -99,7 +246,7 @@ canvas#quantityGraph {
     left: 20px;
     top: 0;
     display: flex;
-    z-index: 1;
+    z-index: 3;
 }
 
 #statsNames,
@@ -107,7 +254,7 @@ canvas#quantityGraph {
     position: absolute;
     left: 20px;
     top: 2rem;
-    z-index: 2;
+    z-index: 4;
     /*padding: 2rem;*/
     /*width: 240px;*/
     display: flex;
@@ -119,7 +266,7 @@ canvas#quantityGraph {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    z-index: 1;
+    z-index: 3;
     text-align: end;
 }
 
@@ -150,6 +297,13 @@ button {
 
 button.animSpeed {
     /*width: 50px;*/
+}
+
+button.mainMenuButton {
+    width: 20rem;
+    font-size: 1.8rem;
+    line-height: 3rem;
+    margin: .5rem;
 }
 
 button:hover {

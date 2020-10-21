@@ -1,74 +1,6 @@
 window.onload = function () {
     main.init()
 }
-
-let VAR = {
-    fps: 20,
-    normalFps: 20,
-    W: 0,
-    minW: 500,
-    H: 0,
-    minH: 500,
-    scale: 1,
-    lineWidh: 1,
-    margin: 20,
-    minNumberPlants: 6,
-    startNumberPlants: 0,
-    startNumberCritters: 0,
-    addPlantSeconds: 1
-}
-//
-function random(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-};
-//
-function modPosition(startArrayXY, distance, alfa) {
-    let modPositionXY = []
-    let x = Math.sin(Math.PI / 180 * alfa) * distance + startArrayXY[0];
-    let y = Math.cos(Math.PI / 180 * alfa) * distance + startArrayXY[1];
-    modPositionXY.push(x);
-    modPositionXY.push(y);
-    return modPositionXY;
-};
-//
-function findAlfa(startXY, endXY) {
-    const x = endXY[0] - startXY[0];
-    const y = endXY[1] - startXY[1];
-    const alfa = endXY[0] >= startXY[0] ? (90 - (Math.round(Math.atan(y / x) * (180 / Math.PI)))) : (270 - (Math.round(Math.atan(y / x) * (180 / Math.PI))));
-    return alfa;
-};
-//
-function distance(startXY, endXY) {
-    let a = endXY[0] - startXY[0];
-    let b = endXY[1] - startXY[1];
-    let c = Math.sqrt(a * a + b * b);
-    return c;
-};
-//
-function shuffleArray(array) {
-    for (e in array) {
-        let temp;
-        let randomIndex = random(0, array.length - 1);
-        temp = array[randomIndex];
-        array[randomIndex] = array[e];
-        array[e] = temp;
-    }
-}
-//
-function copyArray(array) {
-    let copiedArray = [];
-    if (Object.getPrototypeOf(array) !== Array.prototype) {
-        return new Error('function copyArray accepts only array');
-    }
-    for (e in array) {
-        if (array[e] instanceof Object) {
-            return new Error('datatypes in array in function copyArray have to be primitive');
-        }
-        copiedArray[e] = array[e];
-    }
-    return copiedArray;
-}
-//
 main = {
     init: function () {
         main.canvas = document.createElement('canvas');
@@ -83,13 +15,14 @@ main = {
         //
         document.body.appendChild(main.canvas);
         //
-        main.backgroundDraw(); //pierwsze rysowanie z pełnym kryciem
+        backgroundDraw(main.ctx);
         //
         main.stop = false;
         main.speedX2 = false;
         main.speedX4 = false;
         main.speedX10 = false;
         //
+        VAR.simulation = true;
         main.setPlants();
         main.setCritters();
         //
@@ -106,14 +39,14 @@ main = {
         }
     },
     setLayout: function () {
-        VAR.W = Math.max( /*window.innerWidth*/ document.body.clientWidth, VAR.minW);
+        VAR.W = Math.max( /*window.innerWidth*/ document.body.clientWidth, VAR.minW); //
         VAR.H = Math.max(window.innerHeight, VAR.minH);
         VAR.D = Math.min(VAR.W, VAR.H);
         //
         main.canvas.width = VAR.W;
         main.canvas.height = VAR.H;
         //
-        main.ctx.lineWidth = VAR.lineWidh;
+        main.ctx.lineWidth = VAR.lineWidth;
         main.ctx.lineJoin = 'round';
         info.setInfoBar();
         Species.setLabels();
@@ -121,22 +54,8 @@ main = {
     layout: function (ev) {
         console.log('main.layout():skalowanie canvasa w zaleznosci od resiza');
     },
-    backgroundDraw: function () {
-        main.ctx.fillRect(0, 0, VAR.W, VAR.H);
-        main.ctx.lineWidth = 1;
-        main.ctx.strokeRect(0, 0, VAR.W, VAR.H);
-        main.ctx.lineWidth = VAR.lineWidh;
-    },
-    backgroundReset: function () { // wtóre rysowania
-        main.ctx.fillStyle = 'rgba(0,0,0,.9)'
-        main.ctx.fillRect(0, 0, VAR.W, VAR.H);
-        main.ctx.lineWidth = 1;
-        main.ctx.strokeStyle = 'white';
-        main.ctx.strokeRect(0, 0, VAR.W, VAR.H);
-        main.ctx.lineWidth = VAR.lineWidh;
-    },
     animationLoop: function () {
-        main.backgroundReset();
+        backgroundReset(main.ctx);
         for (e in Plant.all) {
             Plant.all[e].draw();
         }
@@ -144,12 +63,13 @@ main = {
             Critter.all[e].draw();
         }
         if (VAR.timerNewPlant <= 0) {
-            if (Object.keys(Plant.all).length <= Plant.maxCount / 2) {
+            if (Object.keys(Plant.all).length <= Plant.maxCount / 3) {
                 new Plant(random(VAR.margin, VAR.W - VAR.margin), random(VAR.margin, VAR.H - VAR.margin));
                 VAR.timerNewPlant = VAR.addPlantSeconds * VAR.normalFps;
             }
         } else VAR.timerNewPlant -= 1;
         info.statsUpdate();
+        Plant.findSpotAttempt = Plant.setFindSpotAttempt();
     },
     setPlants: function () {
         VAR.startNumberPlants = Math.max(VAR.minNumberPlants, Math.round(VAR.W * VAR.H * .00003));
@@ -161,7 +81,7 @@ main = {
     setCritters: function () {
         VAR.startNumberCritters = Math.round(VAR.startNumberPlants / 3);
         for (let i = 0; i < VAR.startNumberCritters; i++) {
-            new Critter(random(VAR.margin, VAR.W - VAR.margin), random(VAR.margin, VAR.H - VAR.margin));
+            new Critter(random(VAR.margin, VAR.W - VAR.margin), random(VAR.margin, VAR.H - VAR.margin), VAR.startGenesRatio.speed * Critter.speedInit, VAR.startGenesRatio.size * Critter.sizeInit, VAR.startGenesRatio.senses * Critter.sensesInit, VAR.startGenesRatio.aggression * Critter.aggressionInit);
         }
     },
     startStop: function () {

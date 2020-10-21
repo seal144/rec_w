@@ -6,7 +6,7 @@ Critter.states = ['growing', 'hungry', 'goingToGoal', 'eating', 'horny', 'copula
 Critter.aggressionMin = 0;
 Critter.aggressionInit = 50;
 Critter.aggressionMax = 100;
-Critter.aggressionSpread = 30;
+Critter.aggressionSpread = window.sessionStorage.speedOfEvolutionRatio ? 30 * window.sessionStorage.speedOfEvolutionRatio : 30; // zmodyfikować o speed of evolution
 //
 //PRZYROST WYKŁADNICZY
 //
@@ -18,12 +18,13 @@ Critter.sizeMin = 6; //7// it's diameter of creature
 Critter.sizeInit = 18; //21
 Critter.sizeMax = 54; //63
 //
-Critter.sensesMin = 10; // it's radius. fieldOfView = size/2+senses 
-Critter.sensesInit = 40;
-Critter.sensesMax = 160;
+Critter.sensesMin = 15; // it's radius. fieldOfView = size/2+senses 
+Critter.sensesInit = 45;
+Critter.sensesMax = 135;
 //
-Critter.affinityFactor = .3; //.4 for a very long time
-Critter.sizeThreatFactor = 1.41; //1.5
+Critter.affinityFactor = window.sessionStorage.speedOfEvolutionRatio ? .4 * window.sessionStorage.speedOfEvolutionRatio : .4;
+Critter.geneMutationRate = window.sessionStorage.speedOfEvolutionRatio ? .33 * window.sessionStorage.speedOfEvolutionRatio : .33; //umieścić reproduce
+Critter.sizeThreatFactor = 1.01 + Critter.affinityFactor;
 Critter.babiesMin = 1;
 Critter.babiesMax = 3;
 Critter.growingTimeS = 5;
