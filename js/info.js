@@ -131,7 +131,6 @@ info = {
             document.querySelector('canvas#quantityGraph').style.left = '21px';
             document.querySelector('canvas#quantityGraph').style.bottom = '1px';
         } else {
-            //document.querySelector('#infoBar').style.width = '260px';
             document.querySelector('#infoBar').setAttribute('style', 'width:260px');
             //
             document.querySelector('#statsNames').style.padding = '2rem';

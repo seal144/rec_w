@@ -1,13 +1,13 @@
-Species.namesTemplate = {
+Species.namesTemplate = { //max 8 letters
     high_speed: ['celer', 'fulgur', 'ventus', 'lepus', 'caprea', 'struthio', 'cursor', 'equitem'],
     low_speed: ['tarda', 'lapis', 'stans', 'testudo', 'cochlea', 'bradypus', 'veternum', 'quod'],
-    high_size: ['magnum', 'crassus', 'giant', 'elephas', 'bovi', 'bos', 'luctator', 'hippopotamus'],
-    low_size: ['parvus', 'tenues', 'leprechaun', 'mus', 'musca', 'cricetus', 'infans', 'coccinella'],
-    high_senses: ['videt', 'audite', 'sentit', 'plecotus', 'strix', 'falco', 'speculator', 'vulpes'],
-    low_senses: ['caecus', 'surdi', 'tenebris', 'talpa', 'paramecium', 'aurelia', 'fodiens', 'annelida'],
-    high_aggression: ['homicidam', 'inimicus', 'malus', 'tigris', 'casuarius', 'orca', 'mellivora', 'sus'],
-    low_aggression: ['amica', 'bonum', 'amans', 'suricata', 'dasypus', 'clupea', 'erinaceus', 'papilio'],
-    neutral: ['medicoris', 'patet', 'griseo', 'livia', 'silva', 'aquae', 'caerula', 'tufty', 'esuriit', 'ursa', 'columba', 'equus', 'subtiliter', 'stultus', 'alvo', 'athleta'],
+    high_size: ['magnum', 'crassus', 'giant', 'elephas', 'bovi', 'bos', 'luctator', 'porcus'],
+    low_size: ['parvus', 'tenues', 'gnome', 'mus', 'musca', 'cricetus', 'infans', 'formica'],
+    high_senses: ['videt', 'audite', 'sentit', 'plecotus', 'strix', 'falco', 'observet', 'vulpes'],
+    low_senses: ['caecus', 'surdi', 'tenebris', 'talpa', 'amoeba', 'aurelia', 'fodiens', 'annelida'],
+    high_aggression: ['bellum', 'inimicus', 'malus', 'tigris', 'gulo', 'orca', 'mellivora', 'sus'],
+    low_aggression: ['amica', 'bonum', 'amans', 'suricata', 'dasypus', 'clupea', 'vitula', 'papilio'],
+    neutral: ['medicoris', 'patet', 'griseo', 'livia', 'silva', 'aquae', 'caerula', 'tufty', 'esuriit', 'ursa', 'columba', 'equus', 'collegam', 'stultus', 'alvo', 'athleta'],
 }
 Species.names = {}
 Species.refillNamesArrayIfEmpty = function () {
@@ -60,7 +60,6 @@ function Species(holotype) {
 }
 //
 Species.prototype.setName = function (mainFeature) {
-    console.log(mainFeature);
     Species.refillNamesArrayIfEmpty();
     let name;
     const nameCase1 = random(0, 1);
@@ -101,7 +100,6 @@ Species.prototype.setName = function (mainFeature) {
         name += ' ' + Species.names.neutral.shift();
     }
     name = name.toUpperCase();
-    console.log(name);
     return name;
 };
 //
@@ -148,7 +146,7 @@ Species.prototype.addLabel = function () {
 Species.addH5 = function (statistic, holotype) {
     let h5 = document.createElement('h5');
     h5.className = 'S' + statistic;
-    if (statistic === 'population' || statistic === 'generation') {
+    if (statistic === 'generation') {
         h5.innerHTML = statistic.toUpperCase() + ': ' + String(holotype[statistic])
     } else {
         h5.innerHTML = statistic.toUpperCase() + ': ' + String(Math.round(holotype.genes.ratio[statistic] * 100) / 100);
@@ -159,9 +157,9 @@ Species.addH5 = function (statistic, holotype) {
 Species.addPhantom = function (spec) {
     const canvas = document.createElement('canvas');
     ctx = canvas.getContext('2d')
-    canvas.width = 70;
-    canvas.height = 70;
-    ctx.lineWidth = VAR.lineWidh;
+    canvas.width = 74;
+    canvas.height = 74;
+    ctx.lineWidth = VAR.lineWidth;
     ctx.lineJoin = 'round';
     canvas.className = 'Sphantom';
     //
@@ -170,7 +168,7 @@ Species.addPhantom = function (spec) {
     //
     const tempXY = spec.holotype.xy;
     const tempAlfa = spec.holotype.drawing.alfa;
-    spec.holotype.xy = [35, 35];
+    spec.holotype.xy = [37, 37];
     spec.holotype.drawing.alfa = 180;
     spec.holotype.drawBody(ctx);
     spec.holotype.drawSenses(ctx);
@@ -197,5 +195,6 @@ Species.removeIndividual = function (species) {
 }
 //
 Species.setLabels = function () {
-    document.querySelector('div#species').style.top = String(VAR.H) + 'px'
+    document.querySelector('div#species').style.top = String(VAR.H) + 'px';
+    document.querySelector('div#species').style.width = String(VAR.W) - 20 + 'px';
 }
