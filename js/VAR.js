@@ -94,3 +94,15 @@ function backgroundFog(ctx) {
     ctx.fillStyle = 'rgba(0,0,0,.2)';
     ctx.fillRect(0, 0, VAR.W, VAR.H);
 }
+
+//test
+const energyOutgo1 = function (speed, size, senses) {
+    const energyLoss = ((speed * 2.5) * (size * 1) + senses) * .0035;
+    console.log('zurzycie na sec:', energyLoss * 20);
+    console.log('zurzycie 200 energii w :', 200 / (energyLoss * 20), ' sec')
+}
+const energyOutgo2 = function (speed, size, senses) {
+    const energyLoss = ((speed * 1) * (size * 1) + (senses * .5)) * .35;
+    console.log('zurzycie na sec:', energyLoss * 20);
+    console.log('zurzycie 200 energii w :', 200 / (energyLoss * 20), ' sec')
+}

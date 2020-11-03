@@ -70,7 +70,7 @@ info = {
         document.getElementById('infoBar').appendChild(info.canvasQG);
     },
     quantityGraphLayout: function () {
-        if (VAR.W <= 800 || VAR.H <= 650) {
+        if (VAR.W <= 700 || VAR.H <= 650) {
             info.canvasQG.width = 146;
             info.canvasQG.height = 146;
             info.ctxQG.lineWidth = 1;
@@ -109,7 +109,7 @@ info = {
     },
     setInfoBar: function () {
         info.initQuantityGrapth();
-        if (VAR.W <= 800 || VAR.H <= 650) {
+        if (VAR.W <= 700 || VAR.H <= 650) {
             document.querySelector('#infoBar').style.width = '170px';
             //
             document.querySelector('#statsNames').style.padding = '.5rem';
@@ -117,7 +117,7 @@ info = {
             document.querySelector('#stats').style.padding = '.5rem';
             document.querySelector('#stats').style.width = '150px';
             //
-            document.querySelectorAll('p').forEach(function (e) {
+            document.querySelectorAll('#infoBar p').forEach(function (e) {
                 e.style.fontSize = '1.1rem';
             })
             document.querySelector('button').style.width = '45px';
@@ -138,7 +138,7 @@ info = {
             document.querySelector('#stats').style.padding = '2rem';
             document.querySelector('#stats').style.width = '240px';
             //
-            document.querySelectorAll('p').forEach(function (e) {
+            document.querySelectorAll('#infoBar p').forEach(function (e) {
                 e.style.fontSize = '1.3rem';
             })
             //
@@ -153,5 +153,24 @@ info = {
         document.querySelector('#infoBar').style.left = '-260px';
         document.querySelector('#infoBar').style.height = String(VAR.H) + 'px';
         document.querySelector('#showInfoBar').style.height = String(VAR.H) + 'px';
+        document.querySelector('#sideToggler').style.height = String(VAR.H) + 'px';
+    },
+    setSettingsInfo: function () {
+        document.getElementById('startSettingsInfo').style.top = String(VAR.H) + 'px';
+        document.getElementById('startSettingsInfo').style.width = String(VAR.W * .6) + 'px';
+        document.getElementById('startSettingsInfo').style.left = String(VAR.W * .4) + 'px';
+        document.getElementById('startSettingsInfo').style.textAlign = 'right';
+        if (VAR.W <= 700 || VAR.H <= 650) {
+            document.getElementById('startSettingsInfo').style.fontSize = '.8rem';
+            document.getElementById('startSettingsInfo').style.paddingRight = '.4rem';
+        } else {
+            document.getElementById('startSettingsInfo').style.fontSize = '1rem';
+            document.getElementById('startSettingsInfo').style.paddingRight = '.5rem';
+        }
+        //
+        if (window.sessionStorage.length > 0) {
+            document.getElementById('startSettingsInfo').innerHTML = 'START SETTINGS: start genes: ' + window.sessionStorage.startSpeedRatio + ' , ' + window.sessionStorage.startSizeRatio + ' , ' + window.sessionStorage.startSensesRatio + ' , ' + window.sessionStorage.startAggressionRatio + ' ; density of plants: ' + Math.round(window.sessionStorage.densityOfPlantsRatio * 100) / 100 + ' ; speed of evolution: ' + Math.round(window.sessionStorage.speedOfEvolutionRatio * 100) / 100 + ' ; endless evolution: ' + (window.sessionStorage.endlessEvolution ? 'yes' : 'no');
+        }
+
     },
 };

@@ -157,8 +157,8 @@ Species.addH5 = function (statistic, holotype) {
 Species.addPhantom = function (spec) {
     const canvas = document.createElement('canvas');
     ctx = canvas.getContext('2d')
-    canvas.width = 74;
-    canvas.height = 74;
+    canvas.width = 60; //74
+    canvas.height = 60; //74
     ctx.lineWidth = VAR.lineWidth;
     ctx.lineJoin = 'round';
     canvas.className = 'Sphantom';
@@ -168,7 +168,7 @@ Species.addPhantom = function (spec) {
     //
     const tempXY = spec.holotype.xy;
     const tempAlfa = spec.holotype.drawing.alfa;
-    spec.holotype.xy = [37, 37];
+    spec.holotype.xy = [canvas.width / 2, canvas.height / 2];
     spec.holotype.drawing.alfa = 180;
     spec.holotype.drawBody(ctx);
     spec.holotype.drawSenses(ctx);
@@ -196,5 +196,5 @@ Species.removeIndividual = function (species) {
 //
 Species.setLabels = function () {
     document.querySelector('div#species').style.top = String(VAR.H) + 'px';
-    document.querySelector('div#species').style.width = String(VAR.W) - 20 + 'px';
+    document.querySelector('div#species').style.width = String(VAR.W) + 'px';
 }
