@@ -23,7 +23,7 @@ Critter.sensesInit = 45;
 Critter.sensesMax = 135;
 //
 Critter.affinityFactor = window.sessionStorage.speedOfEvolutionRatio ? .4 * window.sessionStorage.speedOfEvolutionRatio : .4;
-Critter.geneMutationRate = window.sessionStorage.speedOfEvolutionRatio ? .33 * window.sessionStorage.speedOfEvolutionRatio : .33; //umieścić reproduce
+Critter.geneMutationRate = window.sessionStorage.speedOfEvolutionRatio ? .33 * window.sessionStorage.speedOfEvolutionRatio : .33;
 Critter.sizeThreatFactor = 1.01 + Critter.affinityFactor;
 Critter.babiesMin = 1;
 Critter.babiesMax = 3;

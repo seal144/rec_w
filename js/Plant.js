@@ -4,11 +4,11 @@ Plant.producingSeedsCount = 0;
 Plant.all = {};
 Plant.maxEnergy = 100;
 Plant.reproduceAtEnergy = 70;
-Plant.rootsRadius = window.sessionStorage.densityOfPlantsRatio ? window.sessionStorage.densityOfPlantsRatio * 140 : 35;
+Plant.rootsRadius = window.sessionStorage.densityOfPlantsRatio ? (1 / (window.sessionStorage.densityOfPlantsRatio * 4)) * 140 : 35;
 Plant.childCount = 1;
 Plant.maxReproduceCount = 4;
 Plant.maxCount = 0; //nadpisane w main.setPlants
-Plant.findSpotAttempt = 3 //update in main.animationLoop
+Plant.findSpotAttempt = 3 //update in main.animationLoop by Plant.setFindSpotAttempt
 //
 Plant.ifTooClose = function (plantsAll, MaxDistance, seedXY) {
     for (e in plantsAll) {

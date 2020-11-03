@@ -49,6 +49,7 @@ main = {
         main.ctx.lineWidth = VAR.lineWidth;
         main.ctx.lineJoin = 'round';
         info.setInfoBar();
+        info.setSettingsInfo();
         Species.setLabels();
     },
     layout: function (ev) {

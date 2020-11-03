@@ -81,24 +81,31 @@ menu = {
         }
         document.getElementById(emergingPage).style.transform = 'translateY(0)';
         document.getElementById(emergingPage).style.opacity = '1';
+        document.getElementById(emergingPage).style.zIndex = '3';
         //
         document.getElementById(vanichingPage).style.transform = 'translateY(-100vw)';
         document.getElementById(vanichingPage).style.opacity = '0';
+        document.getElementById(vanichingPage).style.zIndex = '2';
     },
     setSettings: function () {
-        const speedRatio = document.getElementById('inputSpeed').value > 3 ? 3 : document.getElementById('inputSpeed').value < .334 ? .334 : document.getElementById('inputSpeed').value;
-        const sizeRatio = document.getElementById('inputSize').value > 3 ? 3 : document.getElementById('inputSize').value < .334 ? .334 : document.getElementById('inputSize').value;
-        const sensesRatio = document.getElementById('inputSenses').value > 3 ? 3 : document.getElementById('inputSenses').value < .334 ? .334 : document.getElementById('inputSenses').value;
-        const aggressionRatio = document.getElementById('inputAggression').value > 2 ? 2 : document.getElementById('inputAggression').value < 0 ? 0 : document.getElementById('inputAggression').value;
+        let speedRatio = document.getElementById('inputSpeed').value > 3 ? 3 : document.getElementById('inputSpeed').value < .33 ? .33 : document.getElementById('inputSpeed').value;
+        let sizeRatio = document.getElementById('inputSize').value > 3 ? 3 : document.getElementById('inputSize').value < .33 ? .33 : document.getElementById('inputSize').value;
+        let sensesRatio = document.getElementById('inputSenses').value > 3 ? 3 : document.getElementById('inputSenses').value < .33 ? .33 : document.getElementById('inputSenses').value;
+        let aggressionRatio = document.getElementById('inputAggression').value > 2 ? 2 : document.getElementById('inputAggression').value < 0 ? 0 : document.getElementById('inputAggression').value;
+        //
+        speedRatio = Math.round(speedRatio * 100) / 100;
+        sizeRatio = Math.round(sizeRatio * 100) / 100;
+        sensesRatio = Math.round(sensesRatio * 100) / 100;
+        aggressionRatio = Math.round(aggressionRatio * 100) / 100;
         //
         window.sessionStorage.setItem('startSpeedRatio', speedRatio);
         window.sessionStorage.setItem('startSizeRatio', sizeRatio);
         window.sessionStorage.setItem('startSensesRatio', sensesRatio);
         window.sessionStorage.setItem('startAggressionRatio', aggressionRatio);
         //
-        window.sessionStorage.densityOfPlantsRatio = 1 / densityOfPlants;
+        window.sessionStorage.densityOfPlantsRatio = densityOfPlants / 4;
         //
-        window.sessionStorage.speedOfEvolutionRatio = speedOfEvolution / 4;
+        window.sessionStorage.speedOfEvolutionRatio = speedOfEvolution === 4 ? 1 : speedOfEvolution > 4 ? (4 + ((speedOfEvolution - 4) * .75)) / 4 : speedOfEvolution < 4 ? (4 - ((4 - speedOfEvolution) * .75)) / 4 : 1;
     },
     selectionBarControl: function (ev) {
         if (ev.target === document.querySelector('#selectionBarDensity .leftTriangle')) {

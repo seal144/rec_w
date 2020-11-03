@@ -12,7 +12,9 @@
     padding: 0;
     box-sizing: border-box;
     font-size: 10px;
-    font-family: 'Montserrat Alternates', sans-serif;
+    font-family:
+        'Montserrat Alternates',
+        sans-serif;
 }
 
 body {
@@ -28,7 +30,7 @@ p#auxiliary_line {
 
 div#species {
     position: absolute;
-    padding: 1rem;
+    padding: .5rem;
     /*JS*/
 }
 
@@ -37,8 +39,8 @@ div#species:hover {
 }
 
 div#species h1 {
-    font-size: 1.8rem;
-    line-height: 2rem;
+    font-size: 1.5rem;
+    line-height: 1.7rem;
     margin: .5rem;
 }
 
@@ -48,24 +50,32 @@ div#species .speciesLabel {
     background-color: rgba(150, 150, 50, .5);
     border: 2px solid white;
     overflow: hidden;
-    padding: .5rem;
-    margin: .5rem;
-    width: 240px;
+    padding: .4rem;
+    /*.5*/
+    margin: .4rem;
+    /*.5*/
+    width: 220px;
+    /*240*/
 }
 
 .speciesLabel h3 {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
+    /*1.6*/
     text-decoration: underline;
     text-align: center;
-    margin: .5rem;
+    margin: .4rem;
+    /*.5*/
     font-style: italic;
 }
 
 .speciesLabel h4 {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+    /*1.2*/
     text-align: center;
-    margin-bottom: 1.5rem;
-    margin-top: 1.2rem;
+    margin-bottom: 1rem;
+    /*1.5*/
+    margin-top: 1rem;
+    /*1.2*/
 }
 
 .speciesLabel h4.Spopulation {
@@ -73,14 +83,18 @@ div#species .speciesLabel {
 }
 
 .speciesLabel h5 {
-    font-size: 1.1rem;
-    margin-left: 2rem;
+    font-size: 1rem;
+    /*1.1*/
+    line-height: 1.2rem;
+    margin-left: 1.8rem;
+    /*2*/
 }
 
 .speciesLabel canvas {
     position: absolute;
-    top: 6.5rem;
-    right: 2rem;
+    top: 5.8rem;
+    right: 1.8rem;
+    /*2*/
 }
 
 canvas {
@@ -96,6 +110,16 @@ canvas#quantityGraph {
     border: 1px solid white;
 }
 
+div.infoBackground {
+    z-index: 3;
+    background-color: var(--infoBackground);
+    overflow: hidden;
+    transition: all .5s ease;
+}
+
+
+/*MAIN MENU START*/
+
 div#mainMenuWrap {
     width: 100vw;
     height: 100vh;
@@ -105,13 +129,6 @@ div#mainMenuWrap {
     justify-content: center;
     align-items: center;
     color: var(--napisy);
-}
-
-div.infoBackground {
-    z-index: 3;
-    background-color: var(--infoBackground);
-    overflow: hidden;
-    transition: all .5s ease;
 }
 
 div#mainMenuWrap div.infoBackground {
@@ -127,10 +144,12 @@ div#mainMenuWrap div.infoBackground p {
     font-size: 1.5rem;
     width: 60vw;
     margin-bottom: 1rem;
+    text-align: justify;
 }
 
 div#mainMenuWrap div.infoBackground p.center {
     text-align: center;
+    width: auto;
 }
 
 div#mainMenuWrap div.infoBackground h2 {
@@ -144,10 +163,20 @@ div#mainMenuWrap div.infoBackground h3 {
     text-align: center;
 }
 
+div#mainMenuWrap div.infoBackground#mainMenu h3 {
+    margin-bottom: 2rem;
+}
+
+
+div#mainMenuWrap #about {
+    z-index: 3;
+}
+
 div#mainMenuWrap #about,
 div#mainMenuWrap #settings {
     transform: translateY(-100vh);
     opacity: 0;
+    z-index: 2;
 }
 
 div#settings #startGenesContainer {
@@ -230,8 +259,19 @@ div#settings button#endlessEvolution {
     width: 5rem;
     padding: .5rem;
     margin: .5rem .2rem 1.5rem;
-
 }
+
+p.footer {
+    position: fixed;
+    font-size: 1.4rem;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 10;
+    opacity: .7;
+}
+
+/*MAIN MENU END*/
+
 
 div#infoBar {
     position: absolute;
@@ -268,6 +308,13 @@ div#infoBar {
     align-items: flex-end;
     z-index: 3;
     text-align: end;
+}
+
+#startSettingsInfo {
+    position: absolute;
+    color: black;
+    display: block;
+    /*top, font-size, left, width, left, text-align, padding-rightt:JS*/
 }
 
 p {
@@ -345,7 +392,7 @@ button:hover {
 input.toggler#sideToggler {
     position: absolute;
     width: 20px;
-    height: 100vh;
+    /*height: 100vh;*/
     opacity: 0;
     left: 0;
     z-index: 100;
@@ -372,35 +419,212 @@ input.toggler#sideToggler:checked ~ #showInfoBar .arrow#arrow2 {
 }
 
 
-/*@media (max-width:800px) {
+@media(max-width: 1300px) {
 
-    #infoBar {
-        width: 170px;
+    div#mainMenuWrap div.infoBackground#about p {
+        font-size: 1.3rem;
+        width: 70vw;
+        margin-bottom: .8rem;
     }
 
-    #statsNames,
-    #stats {
-        width: 150px;
-        padding: .5rem;
+    div#mainMenuWrap div.infoBackground#about h2 {
+        font-size: 2rem;
+        margin-bottom: .7rem;
     }
 
-    p {
-        font-size: 1rem;
+    button.mainMenuButton#aboutBack {
+        width: 12rem;
+        font-size: 1.6rem;
+        line-height: 2.5rem;
     }
 
-    button {
-        width: 45px;
-        font-size: 1rem;
-    }
 
-    button.animSpeed {
-        width: 35px;
-    }
-
-    canvas#quantityGraph {
-        left: 21px;
-        bottom: 1px;
+    p.footer {
+        font-size: 1.2rem;
+        bottom: .8rem;
+        right: .8rem;
     }
 }
 
+
+@media (max-width:700px),
+(max-height:600px) {
+
+    /*SPECIES LABELS START*/
+
+    div#species h1 {
+        font-size: 1.2rem;
+        line-height: 1.4rem;
+        margin: .35rem;
+    }
+
+    div#species .speciesLabel {
+        border: 1px solid white;
+        padding: .2rem;
+        margin: .2rem;
+        width: 180px;
+    }
+
+    .speciesLabel h3 {
+        font-size: 1.1rem;
+        margin: .2rem;
+    }
+
+    .speciesLabel h4 {
+        font-size: .9rem;
+        margin-bottom: .8rem;
+        margin-top: .5rem;
+    }
+
+    .speciesLabel h5 {
+        font-size: .8rem;
+        line-height: 1.1rem;
+        margin-left: 1.2rem;
+    }
+
+    .speciesLabel canvas {
+        top: 3.6rem;
+        right: 1.2rem;
+    }
+
+    /*SPECIES LABELS END*/
+
+    /*MAIN MENU START*/
+
+    div#mainMenuWrap div.infoBackground#about,
+    div#mainMenuWrap div.infoBackground#settings {
+        padding: 1.5rem;
+    }
+
+    button.mainMenuButton {
+        width: 18rem;
+        font-size: 1.6rem;
+        line-height: 2.8rem;
+        margin: .4rem;
+    }
+
+    div#mainMenuWrap div.infoBackground#about p {
+        font-size: 1.1rem;
+        width: 80vw;
+        margin-bottom: .5rem;
+    }
+
+    div#mainMenuWrap div.infoBackground#about h2 {
+        font-size: 1.8rem;
+        margin-bottom: .5rem;
+    }
+
+    button.mainMenuButton#aboutBack {
+        width: 10rem;
+        font-size: 1.5rem;
+        line-height: 2.2rem;
+    }
+
+    div#mainMenuWrap div.infoBackground p {
+        font-size: 1.1rem;
+    }
+
+    div#mainMenuWrap div.infoBackground h2 {
+        font-size: 1.8rem;
+        margin-bottom: .7rem;
+    }
+
+    div#mainMenuWrap div.infoBackground h3 {
+        font-size: 1.3rem;
+    }
+
+    button.mainMenuButton#settingsBack {
+        width: 10rem;
+        font-size: 1.5rem;
+        line-height: 2.2rem;
+    }
+
+    div#settings button#endlessEvolution {
+        font-size: 1.1rem;
+        width: 4.5rem;
+        padding: .3rem;
+        margin: .3rem .1rem 1.2rem;
+    }
+
+    div#settings .rectangle {
+        margin: .3rem .2rem 1rem;
+        height: 2.6rem;
+        width: 1.3rem;
+    }
+
+    div#settings .leftTriangle {
+        margin: .3rem .2rem 1rem;
+        border-top: 1.3rem solid transparent;
+        border-right: 1.7rem solid var(--ziel2);
+        border-bottom: 1.3rem solid transparent
+    }
+
+    div#settings .rightTriangle {
+        margin: .3rem .2rem 1rem;
+        border-top: 1.3rem solid transparent;
+        border-left: 1.7rem solid var(--ziel2);
+        border-bottom: 1.3rem solid transparent
+    }
+
+    div#settings .leftTriangle:hover {
+        border-right: 1.7rem solid rgba(255, 255, 255, .7);
+    }
+
+    div#settings .rightTriangle:hover {
+        border-left: 1.7rem solid rgba(255, 255, 255, .7);
+    }
+
+    div#settings #startGenesContainer .featureInputContainer input {
+        width: 4rem;
+        font-size: 1.2rem;
+    }
+
+    div#settings #startGenesContainer .featureInputContainer {
+        width: 10rem;
+        padding: 5px;
+    }
+
+    p.footer {
+        font-size: 1rem;
+        bottom: .7rem;
+        right: .7rem;
+    }
+}
+
+@media (max-width:600px),
+(max-height:420px) {
+
+    div#mainMenuWrap div.infoBackground#about p {
+        font-size: .9rem;
+        width: 95vw;
+        margin-bottom: .3rem;
+    }
+
+    div#mainMenuWrap div.infoBackground#about h2 {
+        font-size: 1.3rem;
+        margin-bottom: .3rem;
+    }
+
+    button.mainMenuButton#aboutBack {
+        width: 8rem;
+        font-size: 1.3rem;
+        line-height: 2rem;
+    }
+}
+
+@media (max-width:400px) {
+    div#settings #startGenesContainer {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+
+
+/*
+
+
+*/
+
 /*wykomentowane fragmenty są ustawiane w js*/
+/*poprawic responsywność w about*/

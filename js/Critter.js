@@ -131,7 +131,7 @@ Critter.prototype.drawBody = function (ctx) {
         this.drawStreak(ctx);
     } else if (this.genes.mainfeature === 'size') {
         this.drawStripes(sideAlfa, ctx);
-    } else if (this.genes.mainfeature === 'senses' && this.state !== 'growing') {
+    } else if (this.genes.mainfeature === 'senses' /*&& this.state !== 'growing'*/ ) {
         this.drawWhiskers(ctx);
     }
 }
@@ -157,7 +157,7 @@ Critter.prototype.drawStripes = function (sideAlfa, ctx) {
 }
 //
 Critter.prototype.drawWhiskers = function (ctx) {
-    const whiskersLength = this.genes.senses / 8;
+    const whiskersLength = (this.genes.sizeGrowing ? this.genes.sizeGrowing / 35 : this.genes.size / 35) * this.genes.senses / 5;
     for (let i = 0; i < 2; i++) {
         const aye = i === 0 ? 'left' : 'right';
         const ayeXY = modPosition(this.xy, (this.genes.sizeGrowing ? (this.genes.sizeGrowing / 4) : (this.genes.size / 4)), this.drawing.alfa + (i === 0 ? +45 : -45));
@@ -231,10 +231,9 @@ Critter.prototype.setFillColor = function () {
 //MOVING
 //
 Critter.prototype.energyOutgo = function () {
-    const energyLoss = ((this.genes.speed * 2.5) * (this.genes.size * 1) + this.genes.senses) * .0035;
+    const energyLoss = ((this.genes.ratio.speed * 1) * (this.genes.ratio.size * 1) + (this.genes.ratio.senses * .5)) * .35;
+    //const energyLoss = ((this.genes.speed * 2.5) * (this.genes.size * 1) + this.genes.senses) * .0035;
     // const energyLoss = ((this.genes.speed * 1.6) * (this.genes.size * 1.2) + this.genes.senses) * .005;
-    //(1.8 * 1.3) * (18 * 1.2) + 40 * 0.005 = 0.453 (100energy spala w ~11.0s)
-    //2.4*21+40*0.005 = 0.452 (100energy spala w ~11.1s)
     this.energy -= energyLoss;
     if (this.energy <= 0) {
         this.state = 'dying'
@@ -336,10 +335,10 @@ Critter.prototype.goingToGoal = function () {
             this.go();
         } else this.preEating()
     } else if (this.goal instanceof Critter) {
-        if (distance(this.xy, this.goal.xy) > this.genes.size / 2 + this.goal.genes.size / 2) {
+        if (distance(this.xy, this.goal.xy) > this.genes.size * .5 + this.goal.genes.size * .5) {
             this.go();
             if (distance(this.xy, this.goal.xy) < this.genes.size + this.goal.genes.size) this.drawing.newAlfa = findAlfa(this.xy, this.goal.xy) // korekta kąta
-        } else this.setLovePosition()
+        } else this.setLovePosition();
     }
 }
 //
@@ -415,14 +414,13 @@ Critter.prototype.setLovePosition = function () {
             else this.isParentA = true;
         } else if (this.isParentA) {
             if (this.drawing.alfa !== this.goal.drawing.alfa) this.drawing.newAlfa = this.goal.drawing.alfa;
-        } else if (this.isParentB && distance(this.xy, this.goal.xy) >= this.genes.size / 10) {
+        } else if (this.isParentB && distance(this.xy, this.goal.xy) > this.genes.speed /*size / 10*/ ) {
             this.go();
-            if (distance(this.xy, this.goal.xy) <= this.genes.size / 10) {
-                this.energy -= this.sexEnergyLoss;
-                this.goal.energy -= this.goal.sexEnergyLoss;
-                this.copulating(1000);
-                this.goal.copulating(2000);
-            }
+        } else if (this.isParentB) {
+            this.energy -= this.sexEnergyLoss;
+            this.goal.energy -= this.goal.sexEnergyLoss;
+            this.copulating(1000);
+            this.goal.copulating(2000);
         }
     }
 }
@@ -449,7 +447,7 @@ Critter.prototype.copulating = function (time) {
 }
 //
 Critter.prototype.reproduce = function (positionXY, parentA, parentB) {
-    let babiesCount = Object.keys(Critter.all).length * 4 > Object.keys(Plant.all).length ? 0 : Object.keys(Critter.all).length < Math.round(VAR.startNumberCritters * .75) ? Critter.babiesMax : random(Critter.babiesMin, Critter.babiesMax);
+    let babiesCount = Object.keys(Critter.all).length * 4 > Object.keys(Plant.all).length ? 0 : Object.keys(Critter.all).length < Math.round(VAR.startNumberCritters * .75) ? random(Critter.babiesMin, Critter.babiesMax) + 3 : random(Critter.babiesMin, Critter.babiesMax);
     if (Object.keys(Critter.all).length === 1) {
         babiesCount += 2;
     }
@@ -671,19 +669,9 @@ Critter.prototype.speciesCheck = function () {
 
 //
 //PROBLEMY:
-//zwierzaki wchodzą w dziwny taniec godowy
-//zrobić main menu
-//sprobować w energy loss przerobić geny na stosunek <= nie wiem czy to dbry pomysl
-//VAR.lineWidh - jest blad
-//zrobić responsywność w jakimś malym stopniu
-//umieścić na stronie
-//możiwe opcje modyfikacji: gęstość roślin, szybkość ewolucji, startowe geny stworzeń
-//nie maluja sie wasy na etykietach
-// czasami etykiety nie są aktualizowane
-// zrobić responsywność do menu
-//moze warto zeby gdzies byla informacja o ustawieniach swiata
-//moeze etykiety zrobic przynajmniej z jednym progiem responsywności
-// jest problem przy malym menu nie mozna kliknac na ikonki
-//zrobic zeby density ratio standardowe wynosilo 1
-// oslabic troche speed of evolution
-// zrobić commita że menu zostalo dodane
+// zrobić responsywność w jakimś malym stopniu==>
+// umieścić na stronie==>
+// czasami etykiety nie są aktualizowane??
+// zrobić responsywność do menu ==>>
+// moze etykiety zrobic przynajmniej z jednym progiem responsywności ==>>
+// oczyscic kod
