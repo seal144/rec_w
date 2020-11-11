@@ -19,7 +19,6 @@
 
 body {
     background-color: rgb(80, 80, 80);
-    /*overflow-x: hidden;*/
 }
 
 p#auxiliary_line {
@@ -28,6 +27,29 @@ p#auxiliary_line {
     opacity: 0;
 }
 
+
+canvas {
+    position: absolute;
+    z-index: 1;
+}
+
+div.infoBackground {
+    z-index: 3;
+    background-color: var(--infoBackground);
+    overflow: hidden;
+    transition: all .5s ease;
+}
+
+p.footer {
+    position: fixed;
+    font-size: 1.4rem;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 10;
+    opacity: .7;
+}
+
+/*SPECIES SECTION START*/
 div#species {
     position: absolute;
     padding: .5rem;
@@ -51,31 +73,23 @@ div#species .speciesLabel {
     border: 2px solid white;
     overflow: hidden;
     padding: .4rem;
-    /*.5*/
     margin: .4rem;
-    /*.5*/
     width: 220px;
-    /*240*/
 }
 
 .speciesLabel h3 {
     font-size: 1.4rem;
-    /*1.6*/
     text-decoration: underline;
     text-align: center;
     margin: .4rem;
-    /*.5*/
     font-style: italic;
 }
 
 .speciesLabel h4 {
     font-size: 1.1rem;
-    /*1.2*/
     text-align: center;
     margin-bottom: 1rem;
-    /*1.5*/
     margin-top: 1rem;
-    /*1.2*/
 }
 
 .speciesLabel h4.Spopulation {
@@ -84,39 +98,17 @@ div#species .speciesLabel {
 
 .speciesLabel h5 {
     font-size: 1rem;
-    /*1.1*/
     line-height: 1.2rem;
     margin-left: 1.8rem;
-    /*2*/
 }
 
 .speciesLabel canvas {
     position: absolute;
     top: 5.8rem;
     right: 1.8rem;
-    /*2*/
 }
 
-canvas {
-    position: absolute;
-    z-index: 1;
-}
-
-canvas#quantityGraph {
-    position: absolute;
-    /*left: 25px;*/
-    /*bottom: 5px;*/
-    opacity: .8;
-    border: 1px solid white;
-}
-
-div.infoBackground {
-    z-index: 3;
-    background-color: var(--infoBackground);
-    overflow: hidden;
-    transition: all .5s ease;
-}
-
+/*SPECIES SECTION END*/
 
 /*MAIN MENU START*/
 
@@ -261,17 +253,9 @@ div#settings button#endlessEvolution {
     margin: .5rem .2rem 1.5rem;
 }
 
-p.footer {
-    position: fixed;
-    font-size: 1.4rem;
-    bottom: 1rem;
-    right: 1rem;
-    z-index: 10;
-    opacity: .7;
-}
-
 /*MAIN MENU END*/
 
+/*INFO BAR STATS START*/
 
 div#infoBar {
     position: absolute;
@@ -279,14 +263,6 @@ div#infoBar {
     /*left: -260px;*/
     /*width: 260px;*/
     /*height: 100vh;*/
-}
-
-#buttons {
-    position: absolute;
-    left: 20px;
-    top: 0;
-    display: flex;
-    z-index: 3;
 }
 
 #statsNames,
@@ -334,6 +310,22 @@ p.invisible {
     opacity: 0;
 }
 
+canvas#quantityGraph {
+    position: absolute;
+    /*left: 25px;*/
+    /*bottom: 5px;*/
+    opacity: .8;
+    border: 1px solid white;
+}
+
+#buttons {
+    position: absolute;
+    left: 20px;
+    top: 0;
+    display: flex;
+    z-index: 3;
+}
+
 button {
     font-size: 1.2rem;
     /*width: 90px;*/
@@ -344,13 +336,6 @@ button {
 
 button.animSpeed {
     /*width: 50px;*/
-}
-
-button.mainMenuButton {
-    width: 20rem;
-    font-size: 1.8rem;
-    line-height: 3rem;
-    margin: .5rem;
 }
 
 button:hover {
@@ -418,6 +403,15 @@ input.toggler#sideToggler:checked ~ #showInfoBar .arrow#arrow2 {
     transform: rotate(45deg);
 }
 
+/*INFO BAR STATS END*/
+
+button.mainMenuButton {
+    width: 20rem;
+    font-size: 1.8rem;
+    line-height: 3rem;
+    margin: .5rem;
+}
+
 
 @media(max-width: 1300px) {
 
@@ -450,7 +444,7 @@ input.toggler#sideToggler:checked ~ #showInfoBar .arrow#arrow2 {
 @media (max-width:700px),
 (max-height:600px) {
 
-    /*SPECIES LABELS START*/
+    /*SPECIES SECTION START*/
 
     div#species h1 {
         font-size: 1.2rem;
@@ -487,7 +481,7 @@ input.toggler#sideToggler:checked ~ #showInfoBar .arrow#arrow2 {
         right: 1.2rem;
     }
 
-    /*SPECIES LABELS END*/
+    /*SPECIES SECTION END*/
 
     /*MAIN MENU START*/
 
@@ -584,6 +578,8 @@ input.toggler#sideToggler:checked ~ #showInfoBar .arrow#arrow2 {
         padding: 5px;
     }
 
+    /*MAIN MENU END*/
+
     p.footer {
         font-size: 1rem;
         bottom: .7rem;
@@ -619,12 +615,4 @@ input.toggler#sideToggler:checked ~ #showInfoBar .arrow#arrow2 {
     }
 }
 
-
-
-/*
-
-
-*/
-
-/*wykomentowane fragmenty są ustawiane w js*/
-/*poprawic responsywność w about*/
+/*commented fragments are set in js*/

@@ -232,8 +232,6 @@ Critter.prototype.setFillColor = function () {
 //
 Critter.prototype.energyOutgo = function () {
     const energyLoss = ((this.genes.ratio.speed * 1) * (this.genes.ratio.size * 1) + (this.genes.ratio.senses * .5)) * .35;
-    //const energyLoss = ((this.genes.speed * 2.5) * (this.genes.size * 1) + this.genes.senses) * .0035;
-    // const energyLoss = ((this.genes.speed * 1.6) * (this.genes.size * 1.2) + this.genes.senses) * .005;
     this.energy -= energyLoss;
     if (this.energy <= 0) {
         this.state = 'dying'
@@ -446,6 +444,8 @@ Critter.prototype.copulating = function (time) {
     this.timer.copulate -= 1;
 }
 //
+// if numer of plans, in compare to bugs, is too many, bugs don't give birth;
+// if number of bugs is very small, bugs have max number of childen
 Critter.prototype.reproduce = function (positionXY, parentA, parentB) {
     let babiesCount = Object.keys(Critter.all).length * 4 > Object.keys(Plant.all).length ? 0 : Object.keys(Critter.all).length < Math.round(VAR.startNumberCritters * .75) ? random(Critter.babiesMin, Critter.babiesMax) + 3 : random(Critter.babiesMin, Critter.babiesMax);
     if (Object.keys(Critter.all).length === 1) {
@@ -506,7 +506,7 @@ Critter.prototype.dying = function () {
 }
 //
 Critter.prototype.nearBorderAction = function () {
-    // ponizsze warunki sa zwiazne z tym ze maksymalna zmiana kierunku robaczka w changeAlfa() wynosi 90, jeżeli zmiana zostala by zmieniona na więcej niz 90 stopni trzeba też wprowadzic zmiany w warunkach bo w wyjątkowych zytuacjach robaczki mglyby wyjsc poza ekran na dluzej
+    // conditional statements below are based on that, max change of direction in method changeAlfa() is 90 degrees, if that would change for more degrees, it would be necessary to make changes in conditional statements below, because in unique situations bugs wold go outside the screen for longer time
     if (this.xy[0] <= this.genes.size * .6 && ((180 < this.drawing.alfa && this.drawing.alfa < 360) || this.drawing.alfa < 0) && ((180 < this.drawing.newAlfa && this.drawing.newAlfa < 360) || this.drawing.newAlfa < 0)) {
         if (!this.drawing.fastTurning) {
             if (180 <= this.drawing.alfa && this.drawing.alfa <= 225) this.changeAlfa(-90, -45);
@@ -665,13 +665,3 @@ Critter.prototype.speciesCheck = function () {
         return mostRelatedSpecies.name;
     }
 }
-
-
-//
-//PROBLEMY:
-// zrobić responsywność w jakimś malym stopniu==>
-// umieścić na stronie==>
-// czasami etykiety nie są aktualizowane??
-// zrobić responsywność do menu ==>>
-// moze etykiety zrobic przynajmniej z jednym progiem responsywności ==>>
-// oczyscic kod
