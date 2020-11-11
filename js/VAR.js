@@ -95,7 +95,7 @@ function backgroundFog(ctx) {
     ctx.fillRect(0, 0, VAR.W, VAR.H);
 }
 
-//test
+//test functions for compare energy autgo
 const energyOutgo1 = function (speed, size, senses) {
     const energyLoss = ((speed * 2.5) * (size * 1) + senses) * .0035;
     console.log('zurzycie na sec:', energyLoss * 20);
@@ -106,3 +106,8 @@ const energyOutgo2 = function (speed, size, senses) {
     console.log('zurzycie na sec:', energyLoss * 20);
     console.log('zurzycie 200 energii w :', 200 / (energyLoss * 20), ' sec')
 }
+
+/*
+issues:
+-sometimes the species labels show wrong population, don't know why
+*/

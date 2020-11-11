@@ -6,17 +6,17 @@ Critter.states = ['growing', 'hungry', 'goingToGoal', 'eating', 'horny', 'copula
 Critter.aggressionMin = 0;
 Critter.aggressionInit = 50;
 Critter.aggressionMax = 100;
-Critter.aggressionSpread = window.sessionStorage.speedOfEvolutionRatio ? 30 * window.sessionStorage.speedOfEvolutionRatio : 30; // zmodyfikować o speed of evolution
+Critter.aggressionSpread = window.sessionStorage.speedOfEvolutionRatio ? 30 * window.sessionStorage.speedOfEvolutionRatio : 30;
 //
-//PRZYROST WYKŁADNICZY
+//exponential growth
 //
-Critter.speedMin = .6; //.8
-Critter.speedInit = 1.8; //2.4
-Critter.speedMax = 5.4; //7.2
+Critter.speedMin = .6;
+Critter.speedInit = 1.8;
+Critter.speedMax = 5.4;
 //
-Critter.sizeMin = 6; //7// it's diameter of creature
-Critter.sizeInit = 18; //21
-Critter.sizeMax = 54; //63
+Critter.sizeMin = 6; // it's diameter of creature
+Critter.sizeInit = 18;
+Critter.sizeMax = 54;
 //
 Critter.sensesMin = 15; // it's radius. fieldOfView = size/2+senses 
 Critter.sensesInit = 45;
@@ -29,7 +29,7 @@ Critter.babiesMin = 1;
 Critter.babiesMax = 3;
 Critter.growingTimeS = 5;
 Critter.escapingTimeS = 3;
-Critter.eatingSpeed = .6; //.8, 1.4
+Critter.eatingSpeed = .6;
 //
 Critter.similarityCheck = function (loverA, loverB) {
     for (let i = 0; i < 3; i++) {

@@ -74,7 +74,7 @@ main = {
     },
     setPlants: function () {
         VAR.startNumberPlants = Math.max(VAR.minNumberPlants, Math.round(VAR.W * VAR.H * .00003));
-        Plant.maxCount = Math.round(VAR.W * VAR.H * (1 / Plant.rootsRadius) * 0.0115) //415
+        Plant.maxCount = Math.round(VAR.W * VAR.H * (1 / Plant.rootsRadius) * 0.0115)
         for (let i = 0; i < VAR.startNumberPlants; i++) {
             new Plant(random(VAR.margin, VAR.W - VAR.margin), random(VAR.margin, VAR.H - VAR.margin), random(50, 80));
         }
@@ -214,16 +214,3 @@ main = {
         }
     }
 }
-
-
-// KONTROWERSJE:
-// PRZY ODPOWIEDNIEJ KORELACJI ILOSCI ZWIERZĄT DO ROSLIN, ZWIERZĘTA NIE WYDAJĄ POTOMSTWA
-// PRZY BARDZO MALEJ ILOŚCI ROBAKÓW MIOT JEST ZAWSZE NAJWIĘKSZY
-// POWIEKSZYLEM MAPE POPRZEZ POMNIEJSZENIE JEJ ELEMENTÓW: WIELKOŚĆ ROŚLIN(.8), ODLEGLOŚĆ MIEDZY ROSLINAMI(.7), SIZE ZWIERZATEK (~.85), SPEED ZWIERZATEK (~.75), ZWIEKSZONY WYDATEK NA PORUSZANIE (1.2-1.3)
-
-
-
-
-
-//main.ctx.scale(.5,.5)
-//main.ctx
