@@ -92,8 +92,3 @@ const energyOutgo2 = function (speed, size, senses) {
     console.log('zurzycie na sec:', energyLoss * 20);
     console.log('zurzycie 200 energii w :', 200 / (energyLoss * 20), ' sec')
 }
-
-/*
-issues:
--sometimes the species labels show wrong population, don't know why
-*/

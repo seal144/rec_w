@@ -446,7 +446,7 @@ Critter.prototype.copulating = function (time) {
     this.timer.copulate -= 1;
 }
 //
-// if numer of plans, in compare to bugs, is too many, bugs don't give birth;
+// if number of plans, in compare to bugs, is too many, bugs don't give birth;
 // if number of bugs is very small, bugs have max number of childen
 Critter.prototype.reproduce = function (positionXY, parentA, parentB) {
     let babiesCount = Object.keys(Critter.all).length * 4 > Object.keys(Plant.all).length ? 0 : Object.keys(Critter.all).length < Math.round(VAR.startNumberCritters * .75) ? random(Critter.babiesMin, Critter.babiesMax) + 3 : random(Critter.babiesMin, Critter.babiesMax);

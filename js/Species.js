@@ -198,3 +198,8 @@ Species.setLabels = function () {
     document.querySelector('div#species').style.top = String(VAR.H) + 'px';
     document.querySelector('div#species').style.width = String(VAR.W) + 'px';
 }
+
+/*
+issues:
+-sometimes the species labels show wrong population, don't know why
+*/
