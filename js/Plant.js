@@ -1,4 +1,3 @@
-//trezba zrobić porząek z maksymalną liczbą roślin
 Plant.count = 0;
 Plant.producingSeedsCount = 0;
 Plant.all = {};

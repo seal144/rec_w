@@ -57,20 +57,6 @@ function shuffleArray(array) {
         array[e] = temp;
     }
 }
-//
-function copyArray(array) {
-    let copiedArray = [];
-    if (Object.getPrototypeOf(array) !== Array.prototype) {
-        return new Error('function copyArray accepts only array');
-    }
-    for (e in array) {
-        if (array[e] instanceof Object) {
-            return new Error('datatypes in array in function copyArray have to be primitive');
-        }
-        copiedArray[e] = array[e];
-    }
-    return copiedArray;
-}
 //first drawing background
 function backgroundDraw(ctx) {
     ctx.fillStyle = 'rgba(0,0,0)';
@@ -106,8 +92,3 @@ const energyOutgo2 = function (speed, size, senses) {
     console.log('zurzycie na sec:', energyLoss * 20);
     console.log('zurzycie 200 energii w :', 200 / (energyLoss * 20), ' sec')
 }
-
-/*
-issues:
--sometimes the species labels show wrong population, don't know why
-*/

@@ -53,7 +53,7 @@ main = {
         Species.setLabels();
     },
     layout: function (ev) {
-        console.log('main.layout():skalowanie canvasa w zaleznosci od resiza');
+        //method called when browser is resized
     },
     animationLoop: function () {
         backgroundReset(main.ctx);

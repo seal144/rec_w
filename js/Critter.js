@@ -203,12 +203,14 @@ Critter.prototype.drawFieldOfView = function () {
     if (this.drawing.viewDrawAlfa === undefined) this.drawing.viewDrawAlfa = random(0, 360);
     if (this.drawing.viewDrawTimer) {
         main.ctx.strokeStyle = 'rgba(20,20,20,' + this.drawing.transparency + ')' //'rgb(20,20,20)'
-        main.ctx.beginPath()
+        main.ctx.lineWidth = 2;
+        main.ctx.beginPath();
         main.ctx.arc(this.xy[0], this.xy[1], this.genes.size / 2 + this.genes.senses, Math.PI / 180 * (0 + this.drawing.viewDrawAlfa), Math.PI / 180 * (10 + this.drawing.viewDrawAlfa));
         main.ctx.stroke();
+        main.ctx.lineWidth = VAR.lineWidth;
         main.ctx.strokeStyle = 'white';
         this.drawing.viewDrawTimer = false;
-        this.drawing.viewDrawAlfa += 20
+        this.drawing.viewDrawAlfa += 20;
     } else {
         this.drawing.viewDrawTimer = true;
     }
@@ -444,7 +446,7 @@ Critter.prototype.copulating = function (time) {
     this.timer.copulate -= 1;
 }
 //
-// if numer of plans, in compare to bugs, is too many, bugs don't give birth;
+// if number of plans, in compare to bugs, is too many, bugs don't give birth;
 // if number of bugs is very small, bugs have max number of childen
 Critter.prototype.reproduce = function (positionXY, parentA, parentB) {
     let babiesCount = Object.keys(Critter.all).length * 4 > Object.keys(Plant.all).length ? 0 : Object.keys(Critter.all).length < Math.round(VAR.startNumberCritters * .75) ? random(Critter.babiesMin, Critter.babiesMax) + 3 : random(Critter.babiesMin, Critter.babiesMax);

@@ -20,7 +20,7 @@ Species.refillNamesArrayIfEmpty = function () {
     }
     if (oneArrayEmpty) {
         for (e in Species.namesTemplate) {
-            Species.names[e] = copyArray(Species.namesTemplate[e]);
+            Species.names[e] = [...Species.namesTemplate[e]];
         };
         for (e in Species.names) {
             shuffleArray(Species.names[e]);
@@ -198,3 +198,8 @@ Species.setLabels = function () {
     document.querySelector('div#species').style.top = String(VAR.H) + 'px';
     document.querySelector('div#species').style.width = String(VAR.W) + 'px';
 }
+
+/*
+issues:
+-sometimes the species labels show wrong population, don't know why
+*/
