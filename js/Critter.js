@@ -203,12 +203,14 @@ Critter.prototype.drawFieldOfView = function () {
     if (this.drawing.viewDrawAlfa === undefined) this.drawing.viewDrawAlfa = random(0, 360);
     if (this.drawing.viewDrawTimer) {
         main.ctx.strokeStyle = 'rgba(20,20,20,' + this.drawing.transparency + ')' //'rgb(20,20,20)'
-        main.ctx.beginPath()
+        main.ctx.lineWidth = 2;
+        main.ctx.beginPath();
         main.ctx.arc(this.xy[0], this.xy[1], this.genes.size / 2 + this.genes.senses, Math.PI / 180 * (0 + this.drawing.viewDrawAlfa), Math.PI / 180 * (10 + this.drawing.viewDrawAlfa));
         main.ctx.stroke();
+        main.ctx.lineWidth = VAR.lineWidth;
         main.ctx.strokeStyle = 'white';
         this.drawing.viewDrawTimer = false;
-        this.drawing.viewDrawAlfa += 20
+        this.drawing.viewDrawAlfa += 20;
     } else {
         this.drawing.viewDrawTimer = true;
     }
