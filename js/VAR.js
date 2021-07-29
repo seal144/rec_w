@@ -57,20 +57,6 @@ function shuffleArray(array) {
         array[e] = temp;
     }
 }
-//
-function copyArray(array) {
-    let copiedArray = [];
-    if (Object.getPrototypeOf(array) !== Array.prototype) {
-        return new Error('function copyArray accepts only array');
-    }
-    for (e in array) {
-        if (array[e] instanceof Object) {
-            return new Error('datatypes in array in function copyArray have to be primitive');
-        }
-        copiedArray[e] = array[e];
-    }
-    return copiedArray;
-}
 //first drawing background
 function backgroundDraw(ctx) {
     ctx.fillStyle = 'rgba(0,0,0)';

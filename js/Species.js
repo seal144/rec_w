@@ -20,7 +20,7 @@ Species.refillNamesArrayIfEmpty = function () {
     }
     if (oneArrayEmpty) {
         for (e in Species.namesTemplate) {
-            Species.names[e] = copyArray(Species.namesTemplate[e]);
+            Species.names[e] = [...Species.namesTemplate[e]];
         };
         for (e in Species.names) {
             shuffleArray(Species.names[e]);
