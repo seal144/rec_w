@@ -31,12 +31,7 @@ main = {
         main.animation = setInterval(main.animationLoop, 1000 / VAR.fps);
         VAR.timerNewPlant = VAR.addPlantSeconds * VAR.normalFps;
         // 
-        for (e in Species.namesTemplate) {
-            Species.names[e] = copyArray(Species.namesTemplate[e]);
-        };
-        for (e in Species.names) {
-            shuffleArray(Species.names[e]);
-        }
+        Species.resetNames();
     },
     setLayout: function () {
         VAR.W = Math.max( /*window.innerWidth*/ document.body.clientWidth, VAR.minW); //

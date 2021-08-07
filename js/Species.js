@@ -18,14 +18,7 @@ Species.refillNamesArrayIfEmpty = function () {
             break;
         }
     }
-    if (oneArrayEmpty) {
-        for (e in Species.namesTemplate) {
-            Species.names[e] = [...Species.namesTemplate[e]];
-        };
-        for (e in Species.names) {
-            shuffleArray(Species.names[e]);
-        }
-    }
+    if (oneArrayEmpty) Species.resetNames();
 };
 //
 Species.count = 0;
@@ -102,6 +95,15 @@ Species.prototype.setName = function (mainFeature) {
     name = name.toUpperCase();
     return name;
 };
+//
+Species.resetNames = function () {
+  for (e in Species.namesTemplate) {
+    Species.names[e] = [...Species.namesTemplate[e]];
+  };
+  for (e in Species.names) {
+      shuffleArray(Species.names[e]);
+  };
+} ;
 //
 Species.CheckUpdate = function () {
     for (e in Species.all) {
