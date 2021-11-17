@@ -1,6 +1,6 @@
 ## PUBLISHED AT
 
-https://funkcjawformie.pl/
+https://funkcjawformie.pl/recw/
 
 ## ABOUT PROJECT
 
