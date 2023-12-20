@@ -1,6 +1,6 @@
 ## PUBLISHED AT
 
-https://funkcjawformie.pl/recw/
+https://seal144.github.io/rec_w/
 
 ## ABOUT PROJECT
 
